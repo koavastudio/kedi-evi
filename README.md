@@ -1,5 +1,8 @@
 # 4 Kabinli Balkon Kedi Evi
 
+**Etkileşimli proje sayfası:** https://koavastudio.github.io/kedi-evi/  
+Ölçüleri sayfada değiştirince çizimler, kesim listesi ve plaka yerleşimi yeniden hesaplanır.
+
 Teknik dosya (PDF, 5 pafta): **[Kedi-Evi-Teknik-Dosya.pdf](Kedi-Evi-Teknik-Dosya.pdf)**
 
 - Dış ölçü: 80 × 60 × 90 cm (ayaklar dahil), çatı dahil en geniş nokta 84 cm

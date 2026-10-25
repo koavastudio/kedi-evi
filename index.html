@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Balkon Kedi Evi</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: tek sütun teknik föy — üstte ölçü kontrolleri, altında çizim paftaları, kesim listesi, plaka yerleşimi, montaj. */
+:root{
+  --paper:#f4f5f1; --sheet:#fbfbf8; --ink:#1d2733; --muted:#5d6874; --rule:#d5d9d2;
+  --wood:#e2c497; --wood-top:#ecd5b0; --wood-side:#c9a46f; --wood-cut:#b98a52; --hole:#2a2620;
+  --dim:#2459a6; --warn:#a4460f; --warn-bg:#fbeee2;
+  --f-display:"IBM Plex Sans Condensed","Arial Narrow",Arial,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#13171c; --sheet:#1a1f26; --ink:#e4e8ec; --muted:#9aa4ae; --rule:#2d343d;
+  --wood:#9c7a4e; --wood-top:#b18d5f; --wood-side:#7d603b; --wood-cut:#c49660; --hole:#07090b;
+  --dim:#7fb0f2; --warn:#f3a46b; --warn-bg:#2e2117; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#13171c; --sheet:#1a1f26; --ink:#e4e8ec; --muted:#9aa4ae; --rule:#2d343d;
+  --wood:#9c7a4e; --wood-top:#b18d5f; --wood-side:#7d603b; --wood-cut:#c49660; --hole:#07090b;
+  --dim:#7fb0f2; --warn:#f3a46b; --warn-bg:#2e2117; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:15px/1.55 var(--f-body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 64px}
+.wrap{max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:44px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:clamp(30px,5vw,44px);font-weight:700;letter-spacing:-.01em}
+h2{font-size:24px;font-weight:600}
+h3{font-size:17px;font-weight:600}
+p{margin:0;max-width:68ch}
+.eyebrow{font:500 12px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.mono,.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+section{display:flex;flex-direction:column;gap:16px}
+.sec-head{display:flex;flex-direction:column;gap:6px;border-top:2px solid var(--ink);padding-top:12px}
+.sec-head p{color:var(--muted)}
+
+header{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px;align-items:end}
+header .lead{color:var(--muted);margin-top:10px}
+.specs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border:1px solid var(--rule);background:var(--sheet)}
+.specs div{padding:10px 14px;border-bottom:1px solid var(--rule)}
+.specs div:nth-child(odd){border-right:1px solid var(--rule)}
+.specs div:nth-last-child(-n+2){border-bottom:0}
+.specs dt{font:500 11px/1.2 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.specs dd{margin:4px 0 0;font:600 20px/1.2 var(--f-display)}
+.specs dd small{font:400 13px var(--f-body);color:var(--muted)}
+
+.controls{display:flex;flex-wrap:wrap;gap:14px 22px;padding:16px;background:var(--sheet);border:1px solid var(--rule)}
+.ctl{display:flex;flex-direction:column;gap:5px;min-width:0}
+.ctl label{font:500 11px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.ctl input,.ctl select{font:500 15px var(--f-mono);color:var(--ink);background:var(--paper);border:1px solid var(--rule);padding:7px 9px;width:118px}
+.ctl select{width:auto}
+.ctl input:focus-visible,.ctl select:focus-visible,button:focus-visible{outline:2px solid var(--dim);outline-offset:2px}
+.warn{background:var(--warn-bg);color:var(--warn);padding:10px 14px;font-weight:500;border-left:3px solid var(--warn)}
+
+.board{background:var(--sheet);border:1px solid var(--rule);padding:14px;min-width:0}
+.board svg{display:block;width:100%;height:auto}
+.board .cap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font:500 12px var(--f-mono);color:var(--muted);letter-spacing:.04em;margin-bottom:8px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.explode{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:8px}
+.explode input{flex:1;min-width:160px;accent-color:var(--dim)}
+
+/* svg sınıfları */
+.s-out{fill:none;stroke:var(--ink);stroke-width:2.4}
+.s-wood{fill:var(--wood);stroke:var(--ink);stroke-width:2.4}
+.s-cut{fill:var(--wood-cut);stroke:var(--ink);stroke-width:2.4}
+.s-bg{fill:var(--wood-top);stroke:var(--ink);stroke-width:1.2;opacity:.55}
+.s-hole{fill:var(--hole);stroke:var(--ink);stroke-width:2}
+.s-hid{fill:none;stroke:var(--muted);stroke-width:1.6;stroke-dasharray:10 7}
+.s-ground{stroke:var(--muted);stroke-width:1.6;stroke-dasharray:3 6}
+.dim line{stroke:var(--dim);stroke-width:1.3}
+.dim text,.lbl{fill:var(--dim);font-family:var(--f-mono);font-weight:500}
+.tag{fill:var(--ink);font-family:var(--f-display);font-weight:700}
+.tagbg{fill:var(--sheet);stroke:var(--ink);stroke-width:1.5}
+.f-front{fill:var(--wood);stroke:var(--ink);stroke-width:1.4;stroke-linejoin:round}
+.f-top{fill:var(--wood-top);stroke:var(--ink);stroke-width:1.4;stroke-linejoin:round}
+.f-side{fill:var(--wood-side);stroke:var(--ink);stroke-width:1.4;stroke-linejoin:round}
+.f-hole{fill:var(--hole)}
+.sheet-bg{fill:var(--paper);stroke:var(--ink);stroke-width:3}
+.piece{fill:var(--wood);stroke:var(--ink);stroke-width:2.5}
+.piece-t{fill:var(--ink);font-family:var(--f-display);font-weight:700}
+.piece-d{fill:var(--ink);font-family:var(--f-mono)}
+
+table{width:100%;border-collapse:collapse;font-size:14px}
+.tbl{overflow-x:auto;background:var(--sheet);border:1px solid var(--rule)}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font:500 11px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--paper)}
+td.num,th.num{text-align:right}
+td .code{display:inline-grid;place-items:center;width:26px;height:26px;border:1.5px solid var(--ink);font:700 14px var(--f-display)}
+tfoot td{font-weight:600;border-bottom:0}
+.btnrow{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+button{font:600 14px var(--f-body);background:var(--ink);color:var(--paper);border:0;padding:10px 16px;cursor:pointer}
+button:hover{opacity:.88}
+.copied{font:500 13px var(--f-mono);color:var(--dim)}
+pre.shop{white-space:pre-wrap;font:13px/1.6 var(--f-mono);background:var(--sheet);border:1px solid var(--rule);padding:14px;margin:0;overflow-x:auto}
+
+.part{background:var(--sheet);border:1px solid var(--rule);padding:12px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.part-h{display:flex;align-items:baseline;gap:8px}
+.part-h .code{display:inline-grid;place-items:center;min-width:26px;height:26px;border:1.5px solid var(--ink);font:700 14px var(--f-display)}
+.part-h .q{margin-left:auto;font:500 13px var(--f-mono);color:var(--muted)}
+.part .note{font-size:13px;color:var(--muted)}
+.part svg{width:100%;height:auto;display:block}
+
+.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px}
+ul.list{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px}
+ol.steps{margin:0;padding:0;list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:0}
+ol.steps li{counter-increment:s;display:grid;grid-template-columns:44px minmax(0,1fr);gap:12px;padding:12px 0;border-bottom:1px solid var(--rule)}
+ol.steps li::before{content:counter(s);font:700 26px/1 var(--f-display);color:var(--dim)}
+ol.steps b{font-weight:600}
+.note-box{background:var(--sheet);border:1px solid var(--rule);padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+
+@media (max-width:820px){
+  header,.grid2,.cols{grid-template-columns:minmax(0,1fr)}
+  .grid3{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:480px){.grid3{grid-template-columns:minmax(0,1fr)}.ctl input{width:96px}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div>
+      <div class="eyebrow">Proje föyü · balkon tipi · 4 kabin</div>
+      <h1>4 Kabinli Balkon Kedi Evi</h1>
+      <p class="lead">İki katlı, 2×2 düzende dört ayrı yatma bölmesi. Her kabinin kendi giriş deliği var, kediler birbirini görmeden uyuyabilir. Ölçüleri aşağıdan değiştirirsen tüm çizimler, kesim listesi ve plaka yerleşimi yeniden hesaplanır.</p>
+    </div>
+    <dl class="specs" id="specs"></dl>
+  </header>
+
+  <div class="controls" id="controls">
+    <div class="ctl"><label for="inW">Genişlik (mm)</label><input id="inW" type="number" min="600" max="900" step="10" value="800"></div>
+    <div class="ctl"><label for="inD">Derinlik (mm)</label><input id="inD" type="number" min="400" max="700" step="10" value="600"></div>
+    <div class="ctl"><label for="inH">Toplam yükseklik (mm)</label><input id="inH" type="number" min="750" max="1100" step="10" value="900"></div>
+    <div class="ctl"><label for="inT">Malzeme kalınlığı</label>
+      <select id="inT"><option value="15">15 mm</option><option value="18" selected>18 mm</option><option value="21">21 mm</option></select></div>
+    <div class="ctl"><label for="inM">Malzeme</label>
+      <select id="inM"><option value="ply" selected>Su geçirmez (WBP) plywood</option><option value="sunta">Suntalam (yalnız kapalı balkon)</option></select></div>
+    <div class="ctl"><label for="inS">Plaka ölçüsü</label>
+      <select id="inS"><option value="1220x2440" selected>122 × 244 cm</option><option value="1250x2500">125 × 250 cm</option><option value="1830x3660">183 × 366 cm</option></select></div>
+  </div>
+  <div id="warn" class="warn" hidden></div>
+
+  <section>
+    <div class="sec-head"><div class="eyebrow">Genel görünüş</div><h2>Parçalar nasıl birleşiyor</h2>
+      <p>Kaydırıcıyı sağa çektikçe parçalar ayrılır ve harf kodları görünür. Aynı kodlar kesim listesinde ve plaka yerleşiminde kullanılıyor.</p></div>
+    <div class="board">
+      <div id="iso"></div>
+      <div class="explode"><label for="exp" class="eyebrow">Patlatma</label><input id="exp" type="range" min="0" max="100" value="55"></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><div class="eyebrow">Teknik çizimler · ölçüler mm</div><h2>Görünüşler ve kesitler</h2></div>
+    <div class="grid2">
+      <div class="board"><div class="cap"><span>ÖNDEN GÖRÜNÜŞ</span><span>ön paneller takılı</span></div><div id="dFront"></div></div>
+      <div class="board"><div class="cap"><span>ÖNDEN İÇ GÖRÜNÜŞ</span><span>ön paneller (G, H) sökülmüş</span></div><div id="dInner"></div></div>
+    </div>
+    <div class="board"><div class="cap"><span>YAN KESİT</span><span>sol kabinlerin giriş deliği ortasından, sağdan bakış · solda ön</span></div><div id="dSide"></div></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><div class="eyebrow">Kesimhaneye verilecek</div><h2>Kesim listesi</h2>
+      <p>Ölçüler net parça ölçüsüdür, testere payı kesimcinin işidir. Plakayı sen almıyorsan kesimciye listeyi olduğu gibi gönderebilirsin.</p></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Kod</th><th>Parça</th><th class="num">Adet</th><th class="num">Uzunluk</th><th class="num">Genişlik</th><th>İşlem / not</th></tr></thead>
+      <tbody id="cutBody"></tbody>
+      <tfoot><tr><td colspan="2">Toplam</td><td class="num" id="totQty"></td><td colspan="3" id="totArea"></td></tr></tfoot>
+    </table></div>
+    <div class="btnrow"><button id="copyBtn" type="button">Listeyi kopyala</button><span class="copied" id="copied" hidden>Kopyalandı</span></div>
+    <pre class="shop" id="shopText"></pre>
+  </section>
+
+  <section>
+    <div class="sec-head"><div class="eyebrow">Parça detayları</div><h2>Tek tek parça çizimleri</h2>
+      <p>Delik merkezleri parçanın kenarından ölçülmüştür. Ön panellerde delik alt kenarı kabin tabanından 80 mm yukarıda: minder dışarı kaymaz, rüzgâr kedinin yattığı seviyeye doğrudan vurmaz.</p></div>
+    <div class="grid3" id="parts"></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><div class="eyebrow">Plaka yerleşimi</div><h2 id="sheetTitle">Kaç plaka gerekiyor</h2>
+      <p>4 mm testere payıyla düz kesim (gönyeli) yerleşim. Kesimci kendi yerleşimini yapabilir; bu sadece kaç plaka alman gerektiğini gösterir.</p></div>
+    <div class="grid2" id="sheets"></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><div class="eyebrow">Alışveriş</div><h2>Malzeme ve hırdavat</h2></div>
+    <div class="cols">
+      <div class="note-box"><h3>Satın alınacaklar</h3><ul class="list" id="buyList"></ul></div>
+      <div class="note-box"><h3>Gerekli aletler</h3><ul class="list">
+        <li>Akülü matkap, 3 mm pilot uç ve havşa ucu</li>
+        <li>Dekupaj testere (Ø180 delikler için, kesimci CNC ile kesmiyorsa)</li>
+        <li>Metre, gönye, kurşun kalem</li>
+        <li>Zımpara 120 ve 180 numara</li>
+        <li>Fırça veya küçük rulo (vernik için)</li>
+        <li>2 adet işkence (montajda parçaları tutmak için, şart değil)</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><div class="eyebrow">Montaj sırası</div><h2>Adım adım birleştirme</h2>
+      <p>Her vidadan önce 3 mm pilot delik aç, yoksa plywood kenarı yarılır. Vida başlarını havşa ile gömerek kedilerin takılmasını önle.</p></div>
+    <ol class="steps" id="steps"></ol>
+  </section>
+
+  <section>
+    <div class="sec-head"><div class="eyebrow">Balkon için</div><h2>Kış, yağmur ve temizlik</h2></div>
+    <div class="cols">
+      <div class="note-box"><h3>Sıcak tutmak</h3><ul class="list">
+        <li>Her kabinin tabanına 2 cm XPS köpük (strafor) kes, üstüne minder koy. Tabandan gelen soğuğu en çok bu keser.</li>
+        <li>Kışın giriş deliklerine şeffaf PVC şerit perde (iki şerit, ortadan yarık) tak. Kedi iterek girer, ısı içeride kalır.</li>
+        <li>Saman veya polar battaniye ıslanınca soğutur; minderin kılıfı yıkanabilir olsun.</li>
+      </ul></div>
+      <div class="note-box"><h3>Yağmur ve temizlik</h3><ul class="list">
+        <li>Balkon açıksa çatının arka kenarının altına 10 mm takoz koy; çatı öne eğimli olur, su önden akar. Çatı üstüne membran veya şıngıl da yapıştırılabilir.</li>
+        <li>Ayaklar evi yerden kaldırır, balkon yıkanınca taban ıslanmaz.</li>
+        <li>Ön panelleri az sayıda vidayla tak (alt panelde 8, üstte 6 vida). Dört vidayı sökmek yılda bir derin temizlik için yeter.</li>
+        <li>Vernikten sonra evi bir hafta havalandır; kokusu tamamen geçmeden kedileri yerleştirme.</li>
+      </ul></div>
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+const OVS=20, OVF=40, HOLE=180, SILL=80, KERF=4, FEET=40;
+const state={W:800,D:600,H:900,t:18,mat:'ply',sheet:'1220x2440',e:.55};
+const $=id=>document.getElementById(id);
+const r1=n=>Math.round(n*10)/10;
+const fmt=n=>{n=r1(n);return Number.isInteger(n)?String(n):n.toFixed(1).replace('.',',')};
+
+function geom(){
+  const {W,D,H,t}=state, F=FEET;
+  const bodyH=H-F, hs=bodyH-2*t, hc=(hs-t)/2, wc=(W-3*t)/2, dIn=D-2*t, gh=2*t+hc, backH=bodyH-t;
+  const hx=Math.round((t+wc*0.36)/5)*5;
+  const holesG=[{cx:hx,cy:t+SILL+HOLE/2,d:HOLE},{cx:W-hx,cy:t+SILL+HOLE/2,d:HOLE}];
+  const holesH=[{cx:hx,cy:SILL+HOLE/2,d:HOLE},{cx:W-hx,cy:SILL+HOLE/2,d:HOLE}];
+  const vx=[t+wc*.3,t+wc*.7,W-t-wc*.7,W-t-wc*.3].map(Math.round);
+  const vents=[...vx.map(x=>({cx:x,cy:Math.round(t+hc-40),d:25})),...vx.map(x=>({cx:x,cy:Math.round(backH-40),d:25}))];
+  const parts=[
+    {id:'A',name:'Çatı',qty:1,w:W+2*OVS,h:D+OVF,view:'üstten',note:`Yanlardan ${OVS}, önden ${OVF} mm taşar, arkada sıfır`},
+    {id:'B',name:'Taban',qty:1,w:W,h:dIn,view:'üstten',note:'Yan paneller üstüne oturur, ayaklar alttan'},
+    {id:'C',name:'Yan panel',qty:2,w:dIn,h:hs,view:'yandan',note:'Taban ile çatı arasında'},
+    {id:'D',name:'Ara raf',qty:1,w:W-2*t,h:dIn,view:'üstten',note:'İki yan panelin arasına'},
+    {id:'E',name:'Orta bölme',qty:2,w:dIn,h:hc,view:'yandan',note:'Kabinleri sağ-sol ayırır'},
+    {id:'F',name:'Arka panel',qty:1,w:W,h:backH,view:'arkadan',holes:vents,note:'8 × Ø25 havalandırma deliği (isteğe bağlı)'},
+    {id:'G',name:'Ön panel, alt',qty:1,w:W,h:gh,view:'önden',holes:holesG,note:'2 × Ø180 giriş deliği; taban ve raf kenarını örter'},
+    {id:'H',name:'Ön panel, üst',qty:1,w:W,h:hc,view:'önden',holes:holesH,note:'2 × Ø180 giriş deliği'},
+  ];
+  return {W,D,H,t,F,bodyH,hs,hc,wc,dIn,gh,backH,hx,holesG,holesH,parts};
+}
+
+/* ---------- ölçü çizgisi yardımcıları (svg koordinatı, y aşağı) ---------- */
+function dimH(x1,x2,y,yEdge,label,fs){
+  const d=y<yEdge?-1:1, g=fs*.25;
+  return `<g class="dim"><line x1="${x1}" y1="${yEdge+d*g}" x2="${x1}" y2="${y+d*g}"/><line x1="${x2}" y1="${yEdge+d*g}" x2="${x2}" y2="${y+d*g}"/>
+  <line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}"/><line x1="${x1-g}" y1="${y+g}" x2="${x1+g}" y2="${y-g}"/><line x1="${x2-g}" y1="${y+g}" x2="${x2+g}" y2="${y-g}"/>
+  <text x="${(x1+x2)/2}" y="${y-fs*.35}" font-size="${fs}" text-anchor="middle">${label}</text></g>`;
+}
+function dimV(y1,y2,x,xEdge,label,fs){
+  const d=x<xEdge?-1:1, g=fs*.25, my=(y1+y2)/2, tx=x-fs*.35;
+  return `<g class="dim"><line x1="${xEdge+d*g}" y1="${y1}" x2="${x+d*g}" y2="${y1}"/><line x1="${xEdge+d*g}" y1="${y2}" x2="${x+d*g}" y2="${y2}"/>
+  <line x1="${x}" y1="${y1}" x2="${x}" y2="${y2}"/><line x1="${x-g}" y1="${y1+g}" x2="${x+g}" y2="${y1-g}"/><line x1="${x-g}" y1="${y2+g}" x2="${x+g}" y2="${y2-g}"/>
+  <text x="${tx}" y="${my}" font-size="${fs}" text-anchor="middle" transform="rotate(-90 ${tx} ${my})">${label}</text></g>`;
+}
+const rect=(x,y,w,h,cls)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" class="${cls}"/>`;
+const svg=(vb,body,label)=>`<svg viewBox="${vb.join(' ')}" role="img" aria-label="${label}">${body}</svg>`;
+// z yukarı → svg y aşağı
+const Z=z=>-z;
+
+/* ---------- önden görünüş ---------- */
+function drawFront(g){
+  const {W,H,F,t,bodyH,gh,hc,holesG,holesH}=g, fs=26; let s='';
+  s+=`<line x1="${-OVS-60}" y1="0" x2="${W+OVS+60}" y2="0" class="s-ground"/>`;
+  [[30],[W-70]].forEach(([x])=>s+=rect(x,Z(F),40,F,'s-wood'));
+  s+=rect(0,Z(F+gh),W,gh,'s-wood');
+  s+=rect(0,Z(F+bodyH-t),W,bodyH-t-gh,'s-wood');
+  s+=rect(-OVS,Z(F+bodyH),W+2*OVS,t,'s-wood');
+  // gizli çizgiler: raf ve bölme
+  s+=`<line x1="${t}" y1="${Z(F+t)}" x2="${W-t}" y2="${Z(F+t)}" class="s-hid"/>`;
+  s+=`<line x1="${(W-t)/2}" y1="${Z(F+t)}" x2="${(W-t)/2}" y2="${Z(F+bodyH-t)}" class="s-hid"/><line x1="${(W+t)/2}" y1="${Z(F+t)}" x2="${(W+t)/2}" y2="${Z(F+bodyH-t)}" class="s-hid"/>`;
+  s+=`<line x1="${t}" y1="${Z(F+t+hc)}" x2="${W-t}" y2="${Z(F+t+hc)}" class="s-hid"/><line x1="${t}" y1="${Z(F+2*t+hc)}" x2="${W-t}" y2="${Z(F+2*t+hc)}" class="s-hid"/>`;
+  holesG.forEach(h=>s+=`<circle cx="${h.cx}" cy="${Z(F+h.cy)}" r="${h.d/2}" class="s-hole"/>`);
+  holesH.forEach(h=>s+=`<circle cx="${h.cx}" cy="${Z(F+gh+h.cy)}" r="${h.d/2}" class="s-hole"/>`);
+  s+=dimH(0,W,70,0,`${W}`,fs);
+  s+=dimH(-OVS,W+OVS,Z(H)-50,Z(H),`${W+2*OVS} (çatı)`,fs);
+  s+=dimV(Z(0),Z(H),W+OVS+80,W,`${H}`,fs);
+  s+=dimV(Z(0),Z(F),W+OVS+34,W-30,`${F}`,fs*.85);
+  s+=dimV(Z(F),Z(F+gh),-70,0,`G ${fmt(gh)}`,fs*.9);
+  s+=dimV(Z(F+gh),Z(F+bodyH-t),-70,0,`H ${fmt(hc)}`,fs*.9);
+  const h0=holesH[0], cy=Z(F+gh+h0.cy);
+  s+=`<text x="${h0.cx}" y="${cy+8}" font-size="${fs}" text-anchor="middle" class="lbl" style="fill:var(--wood-top)">Ø${HOLE}</text>`;
+  return svg([-OVS-140,Z(H)-120,W+2*OVS+280,H+230],s,'Önden görünüş');
+}
+
+/* ---------- ön paneller sökülmüş ---------- */
+function drawInner(g){
+  const {W,H,F,t,bodyH,hc,wc,hs}=g, fs=26; let s='';
+  s+=`<line x1="${-OVS-60}" y1="0" x2="${W+OVS+60}" y2="0" class="s-ground"/>`;
+  s+=rect(t,Z(F+bodyH-t),W-2*t,bodyH-2*t,'s-bg'); // arka panel görünür
+  [[30],[W-70]].forEach(([x])=>s+=rect(x,Z(F),40,F,'s-wood'));
+  s+=rect(0,Z(F+t),W,t,'s-cut');                      // B
+  s+=rect(0,Z(F+t+hs),t,hs,'s-cut');                  // C sol
+  s+=rect(W-t,Z(F+t+hs),t,hs,'s-cut');                // C sağ
+  s+=rect(t,Z(F+2*t+hc),W-2*t,t,'s-cut');             // D
+  s+=rect((W-t)/2,Z(F+t+hc),t,hc,'s-cut');            // E alt
+  s+=rect((W-t)/2,Z(F+2*t+2*hc),t,hc,'s-cut');        // E üst
+  s+=rect(-OVS,Z(F+bodyH),W+2*OVS,t,'s-cut');         // A
+  const cab=[[t,F+t],[(W+t)/2,F+t],[t,F+2*t+hc],[(W+t)/2,F+2*t+hc]];
+  const names=['Kabin 3','Kabin 4','Kabin 1','Kabin 2'];
+  cab.forEach(([x,z],i)=>s+=`<text x="${x+wc/2}" y="${Z(z+hc/2)+10}" font-size="${fs*1.05}" text-anchor="middle" class="tag" opacity=".55">${names[i]}</text>`);
+  s+=dimH(t,(W-t)/2,Z(F+2*t+hc)-40,Z(F+2*t+hc),`${fmt(wc)}`,fs);
+  s+=dimH((W+t)/2,W-t,Z(F+2*t+hc)-40,Z(F+2*t+hc),`${fmt(wc)}`,fs);
+  s+=dimH(0,W,70,0,`${W}`,fs);
+  s+=dimH(t,W-t,Z(H)-50,Z(H),`${W-2*t} (iç)`,fs);
+  s+=dimV(Z(F+t),Z(F+t+hc),-60,0,`${fmt(hc)}`,fs);
+  s+=dimV(Z(F+2*t+hc),Z(F+2*t+2*hc),-60,0,`${fmt(hc)}`,fs);
+  s+=dimV(Z(F+t),Z(F+t+hs),W+OVS+70,W,`${fmt(hs)} (C)`,fs);
+  return svg([-OVS-120,Z(H)-120,W+2*OVS+230,H+230],s,'Ön paneller sökülmüş iç görünüş');
+}
+
+/* ---------- yan kesit ---------- */
+function drawSide(g){
+  const {D,H,F,t,bodyH,hc,gh,dIn,hs}=g, fs=26; let s='';
+  s+=`<line x1="${-OVF-80}" y1="0" x2="${D+80}" y2="0" class="s-ground"/>`;
+  s+=rect(t,Z(F+t+hs),dIn,hs,'s-bg');                         // karşı yan panel
+  [[30],[D-70]].forEach(([x])=>s+=rect(x,Z(F),40,F,'s-wood'));
+  s+=rect(t,Z(F+t),dIn,t,'s-cut');                            // B
+  s+=rect(t,Z(F+2*t+hc),dIn,t,'s-cut');                       // D
+  s+=rect(D-t,Z(F+bodyH-t),t,bodyH-t,'s-cut');                // F
+  s+=rect(-OVF,Z(F+bodyH),D+OVF,t,'s-cut');                   // A
+  // G: delikle bölünmüş
+  const g1=t+SILL, g2=t+SILL+HOLE;
+  s+=rect(0,Z(F+g1),t,g1,'s-cut'); s+=rect(0,Z(F+gh),t,gh-g2,'s-cut');
+  const h1=SILL, h2=SILL+HOLE;
+  s+=rect(0,Z(F+gh+h1),t,h1,'s-cut'); s+=rect(0,Z(F+gh+hc),t,hc-h2,'s-cut');
+  s+=`<text x="${D/2}" y="${Z(F+t+hc/2)+10}" font-size="${fs*1.05}" text-anchor="middle" class="tag" opacity=".55">Kabin 3</text>`;
+  s+=`<text x="${D/2}" y="${Z(F+2*t+hc*1.5)+10}" font-size="${fs*1.05}" text-anchor="middle" class="tag" opacity=".55">Kabin 1</text>`;
+  s+=dimH(0,D,70,0,`${D}`,fs);
+  s+=dimH(-OVF,0,Z(H)-50,Z(H),`${OVF}`,fs*.85);
+  s+=dimH(t,D-t,Z(H)-50,Z(H),`${dIn} (iç derinlik)`,fs);
+  s+=dimV(Z(F+t),Z(F+g1),-60,0,`${SILL}`,fs*.85);
+  s+=dimV(Z(F+g1),Z(F+g2),-60,0,`Ø${HOLE}`,fs*.85);
+  s+=dimV(Z(F+gh),Z(F+gh+h1),-60,0,`${SILL}`,fs*.85);
+  s+=dimV(Z(F+gh+h1),Z(F+gh+h2),-60,0,`Ø${HOLE}`,fs*.85);
+  s+=dimV(Z(0),Z(H),D+90,D,`${H}`,fs);
+  s+=dimV(Z(F),Z(F+bodyH),D+44,D,`${bodyH} gövde`,fs*.85);
+  return svg([-OVF-130,Z(H)-110,D+OVF+260,H+220],s,'Yan kesit');
+}
+
+/* ---------- eğik izometrik (kabin projeksiyonu) ---------- */
+const CX=.5*Math.cos(35*Math.PI/180), CY=.5*Math.sin(35*Math.PI/180);
+const P=(x,y,z)=>[x+y*CX,-z-y*CY];
+function boxes(g){
+  const {W,D,F,t,hc,hs,bodyH,gh,dIn,holesG,holesH}=g; const b=[];
+  const add=(id,x0,x1,y0,y1,z0,z1,ex,extra)=>b.push(Object.assign({id,x0,x1,y0,y1,z0,z1,ex},extra||{}));
+  [[30,70,30,70],[W-70,W-30,30,70],[30,70,D-70,D-30],[W-70,W-30,D-70,D-30]].forEach(([a,c,d,e],i)=>add('',a,c,d,e,0,F,[0,0,-200]));
+  add('B',0,W,t,D-t,F,F+t,[0,0,-140]);
+  add('C',0,t,t,D-t,F+t,F+t+hs,[-260,0,0]);
+  add('C',W-t,W,t,D-t,F+t,F+t+hs,[260,0,0]);
+  add('D',t,W-t,t,D-t,F+t+hc,F+2*t+hc,[0,0,0]);
+  add('E',(W-t)/2,(W+t)/2,t,D-t,F+t,F+t+hc,[0,0,-70]);
+  add('E',(W-t)/2,(W+t)/2,t,D-t,F+2*t+hc,F+2*t+2*hc,[0,0,110]);
+  add('F',0,W,D-t,D,F,F+bodyH-t,[0,420,0]);
+  add('G',0,W,0,t,F,F+gh,[0,-520,-60],{holes:holesG});
+  add('H',0,W,0,t,F+gh,F+bodyH-t,[0,-520,120],{holes:holesH});
+  add('A',-OVS,W+OVS,-OVF,D,F+bodyH-t,F+bodyH,[0,0,330]);
+  return b;
+}
+function order(bs){
+  const n=bs.length, adj=bs.map(()=>[]), indeg=new Array(n).fill(0), e=.01;
+  const before=(a,b)=>{ // a önce çizilmeli mi
+    if(a.y0>=b.y1-e) return true; if(b.y0>=a.y1-e) return false;
+    if(a.x1<=b.x0+e) return true; if(b.x1<=a.x0+e) return false;
+    if(a.z1<=b.z0+e) return true; return false;};
+  for(let i=0;i<n;i++)for(let j=0;j<n;j++)if(i!==j&&before(bs[i],bs[j])&&!before(bs[j],bs[i])){adj[i].push(j);indeg[j]++;}
+  const out=[],q=[];indeg.forEach((d,i)=>{if(!d)q.push(i)});
+  while(q.length){const i=q.shift();out.push(bs[i]);adj[i].forEach(j=>{if(--indeg[j]===0)q.push(j)})}
+  bs.forEach(b=>{if(!out.includes(b))out.push(b)});
+  return out;
+}
+function moved(b,e){const [dx,dy,dz]=b.ex.map(v=>v*e);return Object.assign({},b,{x0:b.x0+dx,x1:b.x1+dx,y0:b.y0+dy,y1:b.y1+dy,z0:b.z0+dz,z1:b.z1+dz});}
+const poly=(pts,cls)=>`<polygon points="${pts.map(p=>p.map(v=>v.toFixed(1)).join(',')).join(' ')}" class="${cls}"/>`;
+let isoVB=null;
+function drawIso(g){
+  const base=boxes(g);
+  // sabit çerçeve: hem birleşik hem tam patlatılmış hal
+  let mnx=1e9,mny=1e9,mxx=-1e9,mxy=-1e9;
+  [0,1].forEach(e=>base.map(b=>moved(b,e)).forEach(b=>{
+    for(const x of [b.x0,b.x1])for(const y of [b.y0,b.y1])for(const z of [b.z0,b.z1]){const [sx,sy]=P(x,y,z);mnx=Math.min(mnx,sx);mxx=Math.max(mxx,sx);mny=Math.min(mny,sy);mxy=Math.max(mxy,sy);}
+  }));
+  const pad=40; isoVB=[mnx-pad,mny-pad,mxx-mnx+2*pad,mxy-mny+2*pad];
+  const e=state.e, bs=order(base.map(b=>moved(b,e)));
+  let s='', tags='';
+  bs.forEach(b=>{
+    const {x0,x1,y0,y1,z0,z1}=b;
+    s+=poly([P(x0,y0,z0),P(x1,y0,z0),P(x1,y0,z1),P(x0,y0,z1)],'f-front');
+    s+=poly([P(x0,y0,z1),P(x1,y0,z1),P(x1,y1,z1),P(x0,y1,z1)],'f-top');
+    s+=poly([P(x1,y0,z0),P(x1,y1,z0),P(x1,y1,z1),P(x1,y0,z1)],'f-side');
+    if(b.holes) b.holes.forEach(h=>{const [cx,cy]=P(x0+h.cx,y0,z0+h.cy);s+=`<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${h.d/2}" class="f-hole"/>`;});
+    if(b.id&&e>.3){
+      const thin=(x1-x0)<60; const [tx,ty]=thin?P(x1,(y0+y1)/2,(z0+z1)/2):P((x0+x1)/2,y0,(z0+z1)/2);
+      const yy=b.holes?ty+ (b.id==='G'?-(z1-z0)*.08:0):ty;
+      const xx=b.holes?(x0+x1)/2+y0*CX:tx;
+      tags+=`<g opacity="${Math.min(1,(e-.3)/.3).toFixed(2)}"><circle cx="${xx}" cy="${yy}" r="38" class="tagbg"/><text x="${xx}" y="${yy+15}" font-size="42" text-anchor="middle" class="tag">${b.id}</text></g>`;
+    }
+  });
+  $('iso').innerHTML=svg(isoVB,s+tags,'Kedi evi patlatılmış görünüş');
+}
+
+/* ---------- parça çizimleri ---------- */
+function drawPart(p){
+  const {w,h}=p, m=Math.max(w,h), fs=m*.06, pad=m*.2;
+  let s=rect(0,-h,w,h,'s-wood');
+  (p.holes||[]).forEach(o=>s+=`<circle cx="${o.cx}" cy="${-o.cy}" r="${o.d/2}" class="s-hole"/>`);
+  s+=dimH(0,w,fs*1.9,0,fmt(w),fs);
+  s+=dimV(0,-h,-fs*1.9,0,fmt(h),fs);
+  if(p.holes){
+    const a=p.holes[0], b=p.holes[p.holes.length-1];
+    if(a.d>100){
+      s+=dimH(0,a.cx,-h-fs*1.2,-h,fmt(a.cx),fs*.8);
+      s+=dimH(b.cx,w,-h-fs*1.2,-h,fmt(w-b.cx),fs*.8);
+      s+=dimV(0,-a.cy,w+fs*1.4,w,fmt(a.cy),fs*.8);
+      s+=`<text x="${a.cx}" y="${-a.cy+fs*.35}" font-size="${fs*.8}" text-anchor="middle" class="lbl" style="fill:var(--wood-top)">Ø${a.d}</text>`;
+    }else{
+      const xs=[...new Set(p.holes.map(o=>o.cx))].sort((x,y)=>x-y), ys=[...new Set(p.holes.map(o=>o.cy))].sort((x,y)=>x-y);
+      s+=dimV(0,-ys[0],w+fs*1.4,w,fmt(ys[0]),fs*.75);
+      s+=dimV(-ys[1],-h,w+fs*1.4,w,fmt(h-ys[1]),fs*.75);
+      s+=dimH(0,xs[0],-h-fs*1.2,-h,fmt(xs[0]),fs*.75);
+      s+=dimH(xs[0],xs[1],-h-fs*1.2,-h,fmt(xs[1]-xs[0]),fs*.75);
+    }
+  }
+  return svg([-pad,-h-pad,w+2*pad,h+2*pad],s,`${p.id} ${p.name}`);
+}
+
+/* ---------- plaka yerleşimi: rastgele sıralı raf algoritması ---------- */
+function pack(pieces,SW,SL){
+  let seed=12345; const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+  let best=null;
+  for(let it=0;it<2500;it++){
+    const ord=pieces.map((p,i)=>({p,k:it===0?-(p.w*p.h):rnd(),rot:it===0?false:rnd()<.5})).sort((a,b)=>a.k-b.k);
+    const sheets=[]; let ok=true;
+    for(const {p,rot} of ord){
+      const opts=rot?[[p.h,p.w],[p.w,p.h]]:[[p.w,p.h],[p.h,p.w]]; // [enine, boyuna]
+      let placed=false;
+      for(const sh of sheets){
+        for(const row of sh.rows){
+          for(const [a,b] of opts){ if(b<=row.h&&row.used+a<=SW){sh.items.push({p,x:row.used,y:row.y,a,b});row.used+=a+KERF;placed=true;break;} }
+          if(placed)break;
+        }
+        if(placed)break;
+        for(const [a,b] of opts){ if(a<=SW&&sh.len+b<=SL){const row={y:sh.len,h:b,used:a+KERF};sh.rows.push(row);sh.items.push({p,x:0,y:row.y,a,b});sh.len+=b+KERF;placed=true;break;} }
+        if(placed)break;
+      }
+      if(!placed){
+        const fit=opts.find(([a,b])=>a<=SW&&b<=SL); if(!fit){ok=false;break;}
+        const [a,b]=fit; const sh={rows:[{y:0,h:b,used:a+KERF}],items:[{p,x:0,y:0,a,b}],len:b+KERF};sheets.push(sh);
+      }
+    }
+    if(!ok) return null;
+    const score=sheets.length*1e7+sheets[sheets.length-1].len;
+    if(!best||score<best.score) best={score,sheets};
+  }
+  return best.sheets;
+}
+function drawSheet(sh,SW,SL,i,n){
+  const fs=SL*.03; let s=rect(0,0,SL,SW,'sheet-bg');
+  sh.items.forEach(({p,x,y,a,b})=>{
+    // plakayı yatay çiziyoruz: boyuna → x, enine → y
+    s+=rect(y,x,b,a,'piece');
+    const small=Math.min(a,b)<fs*3.2;
+    s+=`<text x="${y+b/2}" y="${x+a/2+(small?fs*.35:-fs*.1)}" font-size="${fs*1.3}" text-anchor="middle" class="piece-t">${p.id}</text>`;
+    if(!small) s+=`<text x="${y+b/2}" y="${x+a/2+fs*1.1}" font-size="${fs*.75}" text-anchor="middle" class="piece-d">${fmt(b)}×${fmt(a)}</text>`;
+  });
+  s+=dimH(0,SL,-fs*1.4,0,`${SL}`,fs);
+  s+=dimV(0,SW,-fs*1.4,0,`${SW}`,fs);
+  return `<div class="board"><div class="cap"><span>PLAKA ${i+1} / ${n}</span><span>${SW} × ${SL} mm</span></div>${svg([-fs*3,-fs*3,SL+fs*4,SW+fs*4],s,'Plaka '+(i+1))}</div>`;
+}
+
+/* ---------- metinler ---------- */
+function render(){
+  const g=geom(), {W,D,H,t,hc,wc,dIn,parts}=g;
+  const warns=[];
+  if(wc<HOLE+40) warns.push(`Kabin iç genişliği ${fmt(wc)} mm, Ø${HOLE} delik için dar. Genişliği artır.`);
+  if(hc<SILL+HOLE+30) warns.push(`Kabin iç yüksekliği ${fmt(hc)} mm, delik sığmıyor. Yüksekliği artır.`);
+  if(hc<330&&hc>=SILL+HOLE+30) warns.push(`Kabin iç yüksekliği ${fmt(hc)} mm; iri bir kedi için 350 mm üstü daha rahat.`);
+  if(W+2*OVS>900) warns.push(`Çatı ile en geniş nokta ${W+2*OVS} mm; balkonun 90 cm civarıysa sığmayabilir.`);
+  $('warn').hidden=!warns.length; $('warn').innerHTML=warns.join('<br>');
+
+  const area=parts.reduce((a,p)=>a+p.w*p.h*p.qty,0)/1e6;
+  const dens=state.mat==='ply'?550:680, kg=area*t/1000*dens;
+  $('specs').innerHTML=`
+    <div><dt>Dış ölçü</dt><dd class="num">${W/10} × ${D/10} × ${H/10} <small>cm</small></dd></div>
+    <div><dt>Çatı dahil en geniş</dt><dd class="num">${(W+2*OVS)/10} <small>cm</small></dd></div>
+    <div><dt>Kabin içi (4 adet)</dt><dd class="num">${fmt(wc/10)} × ${fmt(hc/10)} <small>cm, derinlik ${fmt(dIn/10)}</small></dd></div>
+    <div><dt>Giriş deliği</dt><dd class="num">Ø${HOLE/10} <small>cm, tabandan ${SILL/10} cm yukarıda</small></dd></div>
+    <div><dt>Parça / alan</dt><dd class="num">${parts.reduce((a,p)=>a+p.qty,0)} <small>parça, ${area.toFixed(2).replace('.',',')} m²</small></dd></div>
+    <div><dt>Tahmini ağırlık</dt><dd class="num">~${Math.round(kg)} <small>kg</small></dd></div>`;
+
+  drawIso(g);
+  $('dFront').innerHTML=drawFront(g);
+  $('dInner').innerHTML=drawInner(g);
+  $('dSide').innerHTML=drawSide(g);
+
+  const L=p=>Math.max(p.w,p.h), S=p=>Math.min(p.w,p.h);
+  $('cutBody').innerHTML=parts.map(p=>`<tr><td><span class="code">${p.id}</span></td><td>${p.name}</td><td class="num">${p.qty}</td><td class="num">${fmt(L(p))}</td><td class="num">${fmt(S(p))}</td><td>${p.note||''}</td></tr>`).join('');
+  $('totQty').textContent=parts.reduce((a,p)=>a+p.qty,0);
+  $('totArea').textContent=`${area.toFixed(2).replace('.',',')} m² net malzeme`;
+  const matName=state.mat==='ply'?`${t} mm su geçirmez (WBP) plywood`:`${t} mm suntalam, görünen tüm kenarlar PVC bantlı`;
+  $('shopText').textContent=`KEDİ EVİ KESİM LİSTESİ\nMalzeme: ${matName}\nÖlçüler mm, uzunluk × genişlik\n\n`+
+    parts.map(p=>`${p.id}  ${p.name.padEnd(15)} ${String(p.qty).padStart(2)} adet  ${fmt(L(p))} × ${fmt(S(p))}`).join('\n')+
+    `\n\nDelikler (kesimci yapabiliyorsa):\nG ve H: 2'şer adet Ø${HOLE} delik. Merkezler: kenarlardan ${g.hx} mm; G'de alttan ${fmt(g.holesG[0].cy)} mm, H'de alttan ${g.holesH[0].cy} mm.\nF: 8 adet Ø25 havalandırma deliği (isteğe bağlı).`;
+
+  $('parts').innerHTML=parts.map(p=>`<div class="part"><div class="part-h"><span class="code">${p.id}</span><h3>${p.name}</h3><span class="q">${p.qty} adet</span></div>
+    ${drawPart(p)}<div class="note">${p.view} bakış · ${p.note||''}</div></div>`).join('');
+
+  const [SW,SL]=state.sheet.split('x').map(Number);
+  const pcs=[]; parts.forEach(p=>{for(let i=0;i<p.qty;i++)pcs.push(p)});
+  const sheets=pack(pcs,SW,SL);
+  if(!sheets){$('sheets').innerHTML='<div class="warn">Bazı parçalar bu plakaya sığmıyor, daha büyük plaka seç.</div>';$('sheetTitle').textContent='Plaka yerleşimi';}
+  else{$('sheetTitle').textContent=`${sheets.length} plaka yetiyor`;$('sheets').innerHTML=sheets.map((sh,i)=>drawSheet(sh,SW,SL,i,sheets.length)).join('');}
+
+  const screw=t<=16?'4×40':t<=18?'4×50':'5×60';
+  const nSheet=sheets?sheets.length:'?';
+  $('buyList').innerHTML=[
+    `${nSheet} plaka ${matName} (${SW/10}×${SL/10} cm) veya kesimciden yukarıdaki liste`,
+    `100 adet ${screw} mm paslanmaz ya da galvaniz ahşap vidası (dış mekan için paslanmayan)`,
+    `D3 sınıfı suya dayanıklı ahşap tutkalı, 250 g`,
+    `4 adet ${FEET} mm plastik veya kauçuk mobilya ayağı + vidaları`,
+    `0,75 L dış mekan verniği (yat verniği) veya su bazlı dış cephe ahşap boyası`,
+    `İsteğe bağlı: 2 cm XPS köpük levha (4 kabin tabanı için ${fmt(wc)}×${fmt(dIn)} mm), 4 minder, PVC şerit perde`,
+  ].map(x=>`<li>${x}</li>`).join('');
+
+  $('steps').innerHTML=[
+    `<b>Delikleri aç ve zımparala.</b> Kesimci delmediyse G ve H'ye delik merkezlerini işaretle, pergelle Ø${HOLE} daire çiz, bir köşeye matkapla delik açıp dekupajla kes. Bütün kenarları ve delik içlerini 120 sonra 180 zımparayla yuvarla.`,
+    `<b>Ayakları tabana tak.</b> B'nin alt yüzüne, köşelerden 30–40 mm içeride 4 ayağı vidala.`,
+    `<b>Yan panelleri tabana bağla.</b> İki C'yi B'nin üstüne, dış kenarlar hizalı oturt. Tutkal sür, alttan B'nin içinden her yan panele 4 vida at.`,
+    `<b>Ara rafı yerleştir.</b> Alt orta bölmeyi (E) B'nin ortasına dik koy, takoz gibi kullan: D'yi iki yanın arasına, E'nin üstüne oturt. Böylece raf tam ${fmt(hc)} mm yükseklikte durur. Yanlardan rafa 4'er vida at.`,
+    `<b>Alt orta bölmeyi sabitle.</b> E'yi B'nin altından 3, D'nin üstünden 3 vidayla bağla. Ortada olduğunu iki yandan ${fmt(wc)} mm ölçerek kontrol et.`,
+    `<b>Üst orta bölmeyi koy.</b> İkinci E'yi D'nin üstüne, alttaki E'nin tam hizasına koy. Alt kabinin içinden, D'nin altından yukarı 3 vida at.`,
+    `<b>Arka paneli vidala ve gönyeyi kontrol et.</b> Kutunun köşegenlerini ölç, iki köşegen eşit olunca F'yi arkadan yanlara, tabana, rafa ve bölmelere vidala (her 15 cm'de bir). Arka panel kutuyu kare tutar.`,
+    `<b>Çatıyı tak.</b> A'yı üste koy: yanlardan ${OVS}, önden ${OVF} mm taşsın, arkası F ile aynı hizada olsun. Üstten yanlara, arkaya ve üst bölmeye vidala.`,
+    `<b>Vernikle.</b> Gövdeyi içli dışlı, G ve H'yi ayrı olarak 2–3 kat vernikle. Katlar arasında 180 zımparayla hafifçe geç. En az bir hafta havalandır.`,
+    `<b>Ön panelleri tak.</b> Önce G'yi (taban ve rafın ön kenarını örter), sonra H'yi vidala. G'de 8, H'de 6 vida yeterli; temizlikte bunları söküp paneli çıkarırsın.`,
+    `<b>Kabinleri hazırla.</b> Tabanlara XPS köpük, üstüne minder koy. Evi rüzgâr almayan duvar dibine, girişler rüzgârın tersine bakacak şekilde yerleştir.`,
+  ].map(x=>`<li><div>${x}</div></li>`).join('');
+}
+
+/* ---------- olaylar ---------- */
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+function readInputs(){
+  const n=(id,a,b,d)=>{const v=parseFloat($(id).value);return isFinite(v)?clamp(v,a,b):d};
+  state.W=n('inW',600,900,800); state.D=n('inD',400,700,600); state.H=n('inH',750,1100,900);
+  state.t=+$('inT').value; state.mat=$('inM').value; state.sheet=$('inS').value;
+  render();
+}
+['inW','inD','inH'].forEach(id=>$(id).addEventListener('change',readInputs));
+['inT','inM','inS'].forEach(id=>$(id).addEventListener('change',readInputs));
+$('exp').addEventListener('input',e=>{state.e=e.target.value/100;drawIso(geom());});
+$('copyBtn').addEventListener('click',()=>{
+  const txt=$('shopText').textContent, done=()=>{$('copied').hidden=false;setTimeout(()=>$('copied').hidden=true,1800)};
+  const fallback=()=>{const r=document.createRange();r.selectNodeContents($('shopText'));const s=getSelection();s.removeAllRanges();s.addRange(r);};
+  try{navigator.clipboard.writeText(txt).then(done,fallback);}catch(_){fallback();}
+});
+readInputs();
+})();
+</script>
+
+</body>
+</html>
