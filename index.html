@@ -75,6 +75,7 @@ header .lead{color:var(--muted);margin-top:10px}
 .s-hole{fill:var(--hole);stroke:var(--ink);stroke-width:2}
 .s-hid{fill:none;stroke:var(--muted);stroke-width:1.6;stroke-dasharray:10 7}
 .s-ground{stroke:var(--muted);stroke-width:1.6;stroke-dasharray:3 6}
+.s-seam{stroke:var(--dim);stroke-width:2.6;stroke-dasharray:16 8}
 .dim line{stroke:var(--dim);stroke-width:1.3}
 .dim text,.lbl{fill:var(--dim);font-family:var(--f-mono);font-weight:500}
 .tag{fill:var(--ink);font-family:var(--f-display);font-weight:700}
@@ -128,25 +129,28 @@ ol.steps b{font-weight:600}
 <div class="wrap">
   <header>
     <div>
-      <div class="eyebrow">Proje föyü · balkon tipi · 4 kabin</div>
+      <div class="eyebrow">Proje föyü · balkon tipi · 2 modül · 4 kabin</div>
       <h1>4 Kabinli Balkon Kedi Evi</h1>
-      <p class="lead">İki katlı, 2×2 düzende dört ayrı yatma bölmesi. Her kabinin kendi giriş deliği var, kediler birbirini görmeden uyuyabilir. Ölçüleri aşağıdan değiştirirsen tüm çizimler, kesim listesi ve plaka yerleşimi yeniden hesaplanır.</p>
+      <p class="lead">Üst üste oturan iki ayrı modül, her birinde iki kabin: toplam dört ayrı yatma bölmesi. Her kabinin kendi giriş deliği var, kediler birbirini görmeden uyuyabilir. Gövde, alınan iki adet 60 × 244 cm plakadan çıkacak şekilde hesaplandı. Ölçüleri aşağıdan değiştirirsen tüm çizimler, kesim listesi ve plaka yerleşimi yeniden hesaplanır.</p>
     </div>
     <dl class="specs" id="specs"></dl>
   </header>
 
   <div class="controls" id="controls">
     <div class="ctl"><label for="inW">Genişlik (mm)</label><input id="inW" type="number" min="600" max="900" step="10" value="800"></div>
-    <div class="ctl"><label for="inD">Derinlik (mm)</label><input id="inD" type="number" min="400" max="700" step="10" value="600"></div>
-    <div class="ctl"><label for="inH">Toplam yükseklik (mm)</label><input id="inH" type="number" min="750" max="1100" step="10" value="900"></div>
-    <div class="ctl"><label for="inT">Malzeme kalınlığı</label>
+    <div class="ctl"><label for="inD">Toplam derinlik, çatı dahil (mm)</label><input id="inD" type="number" min="400" max="700" step="2" value="600"></div>
+    <div class="ctl"><label for="inH">Toplam yükseklik (mm)</label><input id="inH" type="number" min="750" max="1100" step="2" value="899"></div>
+    <div class="ctl"><label for="inT">Gövde kalınlığı</label>
       <select id="inT"><option value="15">15 mm</option><option value="18" selected>18 mm</option><option value="21">21 mm</option></select></div>
+    <div class="ctl"><label for="inS">Gövde plakası</label>
+      <select id="inS"><option value="600x2440" selected>60 × 244 cm (alınan)</option><option value="1220x2440">122 × 244 cm</option></select></div>
+    <div class="ctl"><label for="inTB">Ön / arka kalınlığı</label>
+      <select id="inTB"><option value="9" selected>9 mm</option><option value="12">12 mm</option><option value="18">18 mm</option></select></div>
     <div class="ctl"><label for="inM">Malzeme</label>
       <select id="inM"><option value="ply" selected>Su geçirmez (WBP) plywood</option><option value="sunta">Suntalam (yalnız kapalı balkon)</option></select></div>
-    <div class="ctl"><label for="inS">Plaka ölçüsü</label>
-      <select id="inS"><option value="1220x2440" selected>122 × 244 cm</option><option value="1250x2500">125 × 250 cm</option><option value="1830x3660">183 × 366 cm</option></select></div>
   </div>
   <div id="warn" class="warn" hidden></div>
+  <div class="note-box" id="stock"></div>
 
   <section>
     <div class="sec-head"><div class="eyebrow">Genel görünüş</div><h2>Parçalar nasıl birleşiyor</h2>
@@ -161,7 +165,7 @@ ol.steps b{font-weight:600}
     <div class="sec-head"><div class="eyebrow">Teknik çizimler · ölçüler mm</div><h2>Görünüşler ve kesitler</h2></div>
     <div class="grid2">
       <div class="board"><div class="cap"><span>ÖNDEN GÖRÜNÜŞ</span><span>ön paneller takılı</span></div><div id="dFront"></div></div>
-      <div class="board"><div class="cap"><span>ÖNDEN İÇ GÖRÜNÜŞ</span><span>ön paneller (G, H) sökülmüş</span></div><div id="dInner"></div></div>
+      <div class="board"><div class="cap"><span>ÖNDEN İÇ GÖRÜNÜŞ</span><span>ön paneller (F, L) sökülmüş</span></div><div id="dInner"></div></div>
     </div>
     <div class="board"><div class="cap"><span>YAN KESİT</span><span>sol kabinlerin giriş deliği ortasından, sağdan bakış · solda ön</span></div><div id="dSide"></div></div>
   </section>
@@ -180,13 +184,13 @@ ol.steps b{font-weight:600}
 
   <section>
     <div class="sec-head"><div class="eyebrow">Parça detayları</div><h2>Tek tek parça çizimleri</h2>
-      <p>Delik merkezleri parçanın kenarından ölçülmüştür. Ön panellerde delik alt kenarı kabin tabanından 80 mm yukarıda: minder dışarı kaymaz, rüzgâr kedinin yattığı seviyeye doğrudan vurmaz.</p></div>
+      <p>A–F alt modülün, G–L üst modülün parçalarıdır. Delik merkezleri parçanın kenarından ölçülmüştür. Ön panellerde delik alt kenarı kabin tabanından 80 mm yukarıda: minder dışarı kaymaz, rüzgâr kedinin yattığı seviyeye doğrudan vurmaz.</p></div>
     <div class="grid3" id="parts"></div>
   </section>
 
   <section>
     <div class="sec-head"><div class="eyebrow">Plaka yerleşimi</div><h2 id="sheetTitle">Kaç plaka gerekiyor</h2>
-      <p>4 mm testere payıyla düz kesim (gönyeli) yerleşim. Kesimci kendi yerleşimini yapabilir; bu sadece kaç plaka alman gerektiğini gösterir.</p></div>
+      <p>4 mm testere payıyla düz kesim (gönyeli) yerleşim. Gövde parçaları alınan 60 cm'lik şeritlerden, ön ve arka paneller ince ek plakadan kesilir. Kesimci kendi yerleşimini yapabilir.</p></div>
     <div class="grid2" id="sheets"></div>
   </section>
 
@@ -222,7 +226,7 @@ ol.steps b{font-weight:600}
       <div class="note-box"><h3>Yağmur ve temizlik</h3><ul class="list">
         <li>Balkon açıksa çatının arka kenarının altına 10 mm takoz koy; çatı öne eğimli olur, su önden akar. Çatı üstüne membran veya şıngıl da yapıştırılabilir.</li>
         <li>Ayaklar evi yerden kaldırır, balkon yıkanınca taban ıslanmaz.</li>
-        <li>Ön panelleri az sayıda vidayla tak (alt panelde 8, üstte 6 vida). Dört vidayı sökmek yılda bir derin temizlik için yeter.</li>
+        <li>Ön panelleri az sayıda vidayla tak (alt panelde 8, üstte 6 vida). Derin temizlikte modülleri lamalardan ayırıp ayrı ayrı yıkayabilirsin.</li>
         <li>Vernikten sonra evi bir hafta havalandır; kokusu tamamen geçmeden kedileri yerleştirme.</li>
       </ul></div>
     </div>
@@ -231,31 +235,38 @@ ol.steps b{font-weight:600}
 
 <script>
 (function(){
-const OVS=20, OVF=40, HOLE=180, SILL=80, KERF=4, FEET=40;
-const state={W:800,D:600,H:900,t:18,mat:'ply',sheet:'1220x2440',e:.55};
+const OVS=20, OVF=30, HOLE=180, SILL=80, KERF=4, FEET=50, FB_SHEET=[1220,2440];
+const state={W:800,D:600,H:899,t:18,tb:9,mat:'ply',sheet:'600x2440',e:.55};
 const $=id=>document.getElementById(id);
 const r1=n=>Math.round(n*10)/10;
 const fmt=n=>{n=r1(n);return Number.isInteger(n)?String(n):n.toFixed(1).replace('.',',')};
 
 function geom(){
-  const {W,D,H,t}=state, F=FEET;
-  const bodyH=H-F, hs=bodyH-2*t, hc=(hs-t)/2, wc=(W-3*t)/2, dIn=D-2*t, gh=2*t+hc, backH=bodyH-t;
+  const {W,H,t,tb}=state, F=FEET, Dt=state.D, D=Dt-OVF; // D: gövde derinliği, Dt: çatı dahil
+  const hc=(H-F-3*t-tb)/2, wc=(W-3*t)/2, dIn=D-2*tb;
+  const zSeam=F+2*t+hc, zUf=zSeam+tb, zR=zUf+hc;  // modül birleşimi, üst kabin tabanı, çatı altı
+  const mL=2*t+hc, mU=tb+hc;                       // alt modül yüksekliği, üst modül (çatısız)
   const hx=Math.round((t+wc*0.36)/5)*5;
-  const holesG=[{cx:hx,cy:t+SILL+HOLE/2,d:HOLE},{cx:W-hx,cy:t+SILL+HOLE/2,d:HOLE}];
-  const holesH=[{cx:hx,cy:SILL+HOLE/2,d:HOLE},{cx:W-hx,cy:SILL+HOLE/2,d:HOLE}];
+  const hole=cy=>[{cx:hx,cy,d:HOLE},{cx:W-hx,cy,d:HOLE}];
+  const holesL=hole(t+SILL+HOLE/2), holesU=hole(tb+SILL+HOLE/2);
   const vx=[t+wc*.3,t+wc*.7,W-t-wc*.7,W-t-wc*.3].map(Math.round);
-  const vents=[...vx.map(x=>({cx:x,cy:Math.round(t+hc-40),d:25})),...vx.map(x=>({cx:x,cy:Math.round(backH-40),d:25}))];
+  const vent=cy=>vx.map(x=>({cx:x,cy:Math.round(cy),d:25}));
   const parts=[
-    {id:'A',name:'Çatı',qty:1,w:W+2*OVS,h:D+OVF,view:'üstten',note:`Yanlardan ${OVS}, önden ${OVF} mm taşar, arkada sıfır`},
-    {id:'B',name:'Taban',qty:1,w:W,h:dIn,view:'üstten',note:'Yan paneller üstüne oturur, ayaklar alttan'},
-    {id:'C',name:'Yan panel',qty:2,w:dIn,h:hs,view:'yandan',note:'Taban ile çatı arasında'},
-    {id:'D',name:'Ara raf',qty:1,w:W-2*t,h:dIn,view:'üstten',note:'İki yan panelin arasına'},
-    {id:'E',name:'Orta bölme',qty:2,w:dIn,h:hc,view:'yandan',note:'Kabinleri sağ-sol ayırır'},
-    {id:'F',name:'Arka panel',qty:1,w:W,h:backH,view:'arkadan',holes:vents,note:'8 × Ø25 havalandırma deliği (isteğe bağlı)'},
-    {id:'G',name:'Ön panel, alt',qty:1,w:W,h:gh,view:'önden',holes:holesG,note:'2 × Ø180 giriş deliği; taban ve raf kenarını örter'},
-    {id:'H',name:'Ön panel, üst',qty:1,w:W,h:hc,view:'önden',holes:holesH,note:'2 × Ø180 giriş deliği'},
+    {id:'A',mod:'alt',name:'Alt taban',qty:1,w:W,h:dIn,view:'üstten',m:'k',note:'Yan paneller üstüne oturur, ayaklar alttan'},
+    {id:'B',mod:'alt',name:'Alt yan panel',qty:2,w:dIn,h:hc+t,view:'yandan',m:'k',note:'Alt tabanın üstüne oturur'},
+    {id:'C',mod:'alt',name:'Alt tavan',qty:1,w:W-2*t,h:dIn,view:'üstten',m:'k',note:'İki yan panelin arasına, üst kenarla aynı hizada'},
+    {id:'D',mod:'alt',name:'Alt bölme',qty:1,w:dIn,h:hc,view:'yandan',m:'k',note:'Taban ile tavan arasında, ortada'},
+    {id:'E',mod:'alt',name:'Alt arka panel',qty:1,w:W,h:mL,view:'arkadan',m:'o',holes:vent(t+hc-40),note:'4 × Ø25 havalandırma (isteğe bağlı)'},
+    {id:'F',mod:'alt',name:'Alt ön panel',qty:1,w:W,h:mL,view:'önden',m:'o',holes:holesL,note:'2 × Ø180 giriş deliği'},
+    {id:'G',mod:'üst',name:'Üst taban',qty:1,w:W,h:dIn,view:'üstten',m:'o',note:'Üst modülün kendi tabanı, yanlar üstüne oturur'},
+    {id:'H',mod:'üst',name:'Üst yan panel',qty:2,w:dIn,h:hc,view:'yandan',m:'k',note:'Üst taban ile çatı arasında'},
+    {id:'I',mod:'üst',name:'Üst bölme',qty:1,w:dIn,h:hc,view:'yandan',m:'k',note:'Üst taban ile çatı arasında, ortada'},
+    {id:'J',mod:'üst',name:'Çatı',qty:1,w:W+2*OVS,h:Dt,view:'üstten',m:'k',note:`Yanlardan ${OVS}, önden ${OVF} mm taşar, arkada sıfır`},
+    {id:'K',mod:'üst',name:'Üst arka panel',qty:1,w:W,h:mU,view:'arkadan',m:'o',holes:vent(tb+hc-40),note:'4 × Ø25 havalandırma (isteğe bağlı)'},
+    {id:'L',mod:'üst',name:'Üst ön panel',qty:1,w:W,h:mU,view:'önden',m:'o',holes:holesU,note:'2 × Ø180 giriş deliği'},
   ];
-  return {W,D,H,t,F,bodyH,hs,hc,wc,dIn,gh,backH,hx,holesG,holesH,parts};
+  parts.forEach(p=>p.th=p.m==='k'?t:tb);
+  return {W,D,Dt,H,t,tb,F,hc,wc,dIn,zSeam,zUf,zR,mL,mU,hx,holesL,holesU,parts};
 }
 
 /* ---------- ölçü çizgisi yardımcıları (svg koordinatı, y aşağı) ---------- */
@@ -277,102 +288,117 @@ const svg=(vb,body,label)=>`<svg viewBox="${vb.join(' ')}" role="img" aria-label
 const Z=z=>-z;
 
 /* ---------- önden görünüş ---------- */
+const seam=(x1,x2,z)=>`<line x1="${x1}" y1="${Z(z)}" x2="${x2}" y2="${Z(z)}" class="s-seam"/>`;
 function drawFront(g){
-  const {W,H,F,t,bodyH,gh,hc,holesG,holesH}=g, fs=26; let s='';
+  const {W,H,F,t,hc,zSeam,zUf,zR,mL,mU,holesL,holesU}=g, fs=26; let s='';
   s+=`<line x1="${-OVS-60}" y1="0" x2="${W+OVS+60}" y2="0" class="s-ground"/>`;
   [[30],[W-70]].forEach(([x])=>s+=rect(x,Z(F),40,F,'s-wood'));
-  s+=rect(0,Z(F+gh),W,gh,'s-wood');
-  s+=rect(0,Z(F+bodyH-t),W,bodyH-t-gh,'s-wood');
-  s+=rect(-OVS,Z(F+bodyH),W+2*OVS,t,'s-wood');
-  // gizli çizgiler: raf ve bölme
-  s+=`<line x1="${t}" y1="${Z(F+t)}" x2="${W-t}" y2="${Z(F+t)}" class="s-hid"/>`;
-  s+=`<line x1="${(W-t)/2}" y1="${Z(F+t)}" x2="${(W-t)/2}" y2="${Z(F+bodyH-t)}" class="s-hid"/><line x1="${(W+t)/2}" y1="${Z(F+t)}" x2="${(W+t)/2}" y2="${Z(F+bodyH-t)}" class="s-hid"/>`;
-  s+=`<line x1="${t}" y1="${Z(F+t+hc)}" x2="${W-t}" y2="${Z(F+t+hc)}" class="s-hid"/><line x1="${t}" y1="${Z(F+2*t+hc)}" x2="${W-t}" y2="${Z(F+2*t+hc)}" class="s-hid"/>`;
-  holesG.forEach(h=>s+=`<circle cx="${h.cx}" cy="${Z(F+h.cy)}" r="${h.d/2}" class="s-hole"/>`);
-  holesH.forEach(h=>s+=`<circle cx="${h.cx}" cy="${Z(F+gh+h.cy)}" r="${h.d/2}" class="s-hole"/>`);
+  s+=rect(0,Z(zSeam),W,mL,'s-wood');                 // F
+  s+=rect(0,Z(zR),W,mU,'s-wood');                    // L
+  s+=rect(-OVS,Z(H),W+2*OVS,t,'s-wood');             // J
+  // gizli çizgiler: tabanlar, tavan, bölmeler
+  [F+t,F+t+hc,zUf].forEach(z=>s+=`<line x1="${t}" y1="${Z(z)}" x2="${W-t}" y2="${Z(z)}" class="s-hid"/>`);
+  [[F+t,F+t+hc],[zUf,zR]].forEach(([a,b])=>[(W-t)/2,(W+t)/2].forEach(x=>s+=`<line x1="${x}" y1="${Z(a)}" x2="${x}" y2="${Z(b)}" class="s-hid"/>`));
+  holesL.forEach(h=>s+=`<circle cx="${h.cx}" cy="${Z(F+h.cy)}" r="${h.d/2}" class="s-hole"/>`);
+  holesU.forEach(h=>s+=`<circle cx="${h.cx}" cy="${Z(zSeam+h.cy)}" r="${h.d/2}" class="s-hole"/>`);
+  s+=seam(-OVS-40,W+OVS+40,zSeam);
   s+=dimH(0,W,70,0,`${W}`,fs);
   s+=dimH(-OVS,W+OVS,Z(H)-50,Z(H),`${W+2*OVS} (çatı)`,fs);
-  s+=dimV(Z(0),Z(H),W+OVS+80,W,`${H}`,fs);
+  s+=dimV(Z(0),Z(H),W+OVS+80,W,`${fmt(H)}`,fs);
   s+=dimV(Z(0),Z(F),W+OVS+34,W-30,`${F}`,fs*.85);
-  s+=dimV(Z(F),Z(F+gh),-70,0,`G ${fmt(gh)}`,fs*.9);
-  s+=dimV(Z(F+gh),Z(F+bodyH-t),-70,0,`H ${fmt(hc)}`,fs*.9);
-  const h0=holesH[0], cy=Z(F+gh+h0.cy);
-  s+=`<text x="${h0.cx}" y="${cy+8}" font-size="${fs}" text-anchor="middle" class="lbl" style="fill:var(--wood-top)">Ø${HOLE}</text>`;
+  s+=dimV(Z(F),Z(zSeam),-70,0,`alt modül ${fmt(mL)}`,fs*.85);
+  s+=dimV(Z(zSeam),Z(H),-70,0,`üst modül ${fmt(mU+t)}`,fs*.85);
+  const h0=holesU[0];
+  s+=`<text x="${h0.cx}" y="${Z(zSeam+h0.cy)+8}" font-size="${fs}" text-anchor="middle" class="lbl" style="fill:var(--wood-top)">Ø${HOLE}</text>`;
   return svg([-OVS-140,Z(H)-120,W+2*OVS+280,H+230],s,'Önden görünüş');
 }
 
 /* ---------- ön paneller sökülmüş ---------- */
 function drawInner(g){
-  const {W,H,F,t,bodyH,hc,wc,hs}=g, fs=26; let s='';
+  const {W,H,F,t,tb,hc,wc,zSeam,zUf,zR,mL,mU}=g, fs=26; let s='';
   s+=`<line x1="${-OVS-60}" y1="0" x2="${W+OVS+60}" y2="0" class="s-ground"/>`;
-  s+=rect(t,Z(F+bodyH-t),W-2*t,bodyH-2*t,'s-bg'); // arka panel görünür
+  s+=rect(t,Z(zSeam-t),W-2*t,hc,'s-bg');             // alt arka panel görünür
+  s+=rect(t,Z(zR),W-2*t,hc,'s-bg');                  // üst arka panel görünür
   [[30],[W-70]].forEach(([x])=>s+=rect(x,Z(F),40,F,'s-wood'));
-  s+=rect(0,Z(F+t),W,t,'s-cut');                      // B
-  s+=rect(0,Z(F+t+hs),t,hs,'s-cut');                  // C sol
-  s+=rect(W-t,Z(F+t+hs),t,hs,'s-cut');                // C sağ
-  s+=rect(t,Z(F+2*t+hc),W-2*t,t,'s-cut');             // D
-  s+=rect((W-t)/2,Z(F+t+hc),t,hc,'s-cut');            // E alt
-  s+=rect((W-t)/2,Z(F+2*t+2*hc),t,hc,'s-cut');        // E üst
-  s+=rect(-OVS,Z(F+bodyH),W+2*OVS,t,'s-cut');         // A
-  const cab=[[t,F+t],[(W+t)/2,F+t],[t,F+2*t+hc],[(W+t)/2,F+2*t+hc]];
-  const names=['Kabin 3','Kabin 4','Kabin 1','Kabin 2'];
-  cab.forEach(([x,z],i)=>s+=`<text x="${x+wc/2}" y="${Z(z+hc/2)+10}" font-size="${fs*1.05}" text-anchor="middle" class="tag" opacity=".55">${names[i]}</text>`);
-  s+=dimH(t,(W-t)/2,Z(F+2*t+hc)-40,Z(F+2*t+hc),`${fmt(wc)}`,fs);
-  s+=dimH((W+t)/2,W-t,Z(F+2*t+hc)-40,Z(F+2*t+hc),`${fmt(wc)}`,fs);
+  s+=rect(0,Z(F+t),W,t,'s-cut');                     // A
+  s+=rect(0,Z(zSeam),t,hc+t,'s-cut');                // B sol
+  s+=rect(W-t,Z(zSeam),t,hc+t,'s-cut');              // B sağ
+  s+=rect(t,Z(zSeam),W-2*t,t,'s-cut');               // C
+  s+=rect((W-t)/2,Z(F+t+hc),t,hc,'s-cut');           // D
+  s+=rect(0,Z(zUf),W,tb,'s-cut');                    // G
+  s+=rect(0,Z(zR),t,hc,'s-cut');                     // H sol
+  s+=rect(W-t,Z(zR),t,hc,'s-cut');                   // H sağ
+  s+=rect((W-t)/2,Z(zR),t,hc,'s-cut');               // I
+  s+=rect(-OVS,Z(H),W+2*OVS,t,'s-cut');              // J
+  s+=seam(-OVS-40,W+OVS+40,zSeam);
+  const cab=[[t,F+t,'Kabin 3'],[(W+t)/2,F+t,'Kabin 4'],[t,zUf,'Kabin 1'],[(W+t)/2,zUf,'Kabin 2']];
+  cab.forEach(([x,z,n])=>s+=`<text x="${x+wc/2}" y="${Z(z+hc/2)+10}" font-size="${fs*1.05}" text-anchor="middle" class="tag" opacity=".55">${n}</text>`);
+  s+=dimH(t,(W-t)/2,Z(zUf)-40,Z(zUf),`${fmt(wc)}`,fs);
+  s+=dimH((W+t)/2,W-t,Z(zUf)-40,Z(zUf),`${fmt(wc)}`,fs);
   s+=dimH(0,W,70,0,`${W}`,fs);
   s+=dimH(t,W-t,Z(H)-50,Z(H),`${W-2*t} (iç)`,fs);
   s+=dimV(Z(F+t),Z(F+t+hc),-60,0,`${fmt(hc)}`,fs);
-  s+=dimV(Z(F+2*t+hc),Z(F+2*t+2*hc),-60,0,`${fmt(hc)}`,fs);
-  s+=dimV(Z(F+t),Z(F+t+hs),W+OVS+70,W,`${fmt(hs)} (C)`,fs);
+  s+=dimV(Z(zUf),Z(zR),-60,0,`${fmt(hc)}`,fs);
+  s+=dimV(Z(F),Z(zSeam),W+OVS+70,W,`${fmt(mL)} alt`,fs*.9);
+  s+=dimV(Z(zSeam),Z(H),W+OVS+70,W,`${fmt(mU+t)} üst`,fs*.9);
   return svg([-OVS-120,Z(H)-120,W+2*OVS+230,H+230],s,'Ön paneller sökülmüş iç görünüş');
 }
 
 /* ---------- yan kesit ---------- */
 function drawSide(g){
-  const {D,H,F,t,bodyH,hc,gh,dIn,hs}=g, fs=26; let s='';
+  const {D,Dt,H,F,t,tb,hc,dIn,zSeam,zUf,zR,mL,mU}=g, fs=26; let s='';
   s+=`<line x1="${-OVF-80}" y1="0" x2="${D+80}" y2="0" class="s-ground"/>`;
-  s+=rect(t,Z(F+t+hs),dIn,hs,'s-bg');                         // karşı yan panel
+  s+=rect(tb,Z(zSeam),dIn,hc+t,'s-bg');                      // alt karşı yan panel
+  s+=rect(tb,Z(zR),dIn,hc,'s-bg');                           // üst karşı yan panel
   [[30],[D-70]].forEach(([x])=>s+=rect(x,Z(F),40,F,'s-wood'));
-  s+=rect(t,Z(F+t),dIn,t,'s-cut');                            // B
-  s+=rect(t,Z(F+2*t+hc),dIn,t,'s-cut');                       // D
-  s+=rect(D-t,Z(F+bodyH-t),t,bodyH-t,'s-cut');                // F
-  s+=rect(-OVF,Z(F+bodyH),D+OVF,t,'s-cut');                   // A
-  // G: delikle bölünmüş
-  const g1=t+SILL, g2=t+SILL+HOLE;
-  s+=rect(0,Z(F+g1),t,g1,'s-cut'); s+=rect(0,Z(F+gh),t,gh-g2,'s-cut');
-  const h1=SILL, h2=SILL+HOLE;
-  s+=rect(0,Z(F+gh+h1),t,h1,'s-cut'); s+=rect(0,Z(F+gh+hc),t,hc-h2,'s-cut');
+  s+=rect(tb,Z(F+t),dIn,t,'s-cut');                          // A
+  s+=rect(tb,Z(zSeam),dIn,t,'s-cut');                        // C
+  s+=rect(tb,Z(zUf),dIn,tb,'s-cut');                         // G
+  s+=rect(D-tb,Z(zSeam),tb,mL,'s-cut');                      // E
+  s+=rect(D-tb,Z(zR),tb,mU,'s-cut');                         // K
+  s+=rect(-OVF,Z(H),D+OVF,t,'s-cut');                        // J
+  // ön paneller delik ortasından bölünmüş
+  const l1=F+t+SILL, l2=l1+HOLE, u1=zUf+SILL, u2=u1+HOLE;
+  s+=rect(0,Z(l1),tb,l1-F,'s-cut'); s+=rect(0,Z(zSeam),tb,zSeam-l2,'s-cut');
+  s+=rect(0,Z(u1),tb,u1-zSeam,'s-cut'); s+=rect(0,Z(zR),tb,zR-u2,'s-cut');
+  s+=seam(-OVF-50,D+50,zSeam);
   s+=`<text x="${D/2}" y="${Z(F+t+hc/2)+10}" font-size="${fs*1.05}" text-anchor="middle" class="tag" opacity=".55">Kabin 3</text>`;
-  s+=`<text x="${D/2}" y="${Z(F+2*t+hc*1.5)+10}" font-size="${fs*1.05}" text-anchor="middle" class="tag" opacity=".55">Kabin 1</text>`;
-  s+=dimH(0,D,70,0,`${D}`,fs);
+  s+=`<text x="${D/2}" y="${Z(zUf+hc/2)+10}" font-size="${fs*1.05}" text-anchor="middle" class="tag" opacity=".55">Kabin 1</text>`;
+  s+=dimH(0,D,70,0,`${D} gövde`,fs);
   s+=dimH(-OVF,0,Z(H)-50,Z(H),`${OVF}`,fs*.85);
-  s+=dimH(t,D-t,Z(H)-50,Z(H),`${dIn} (iç derinlik)`,fs);
-  s+=dimV(Z(F+t),Z(F+g1),-60,0,`${SILL}`,fs*.85);
-  s+=dimV(Z(F+g1),Z(F+g2),-60,0,`Ø${HOLE}`,fs*.85);
-  s+=dimV(Z(F+gh),Z(F+gh+h1),-60,0,`${SILL}`,fs*.85);
-  s+=dimV(Z(F+gh+h1),Z(F+gh+h2),-60,0,`Ø${HOLE}`,fs*.85);
-  s+=dimV(Z(0),Z(H),D+90,D,`${H}`,fs);
-  s+=dimV(Z(F),Z(F+bodyH),D+44,D,`${bodyH} gövde`,fs*.85);
-  return svg([-OVF-130,Z(H)-110,D+OVF+260,H+220],s,'Yan kesit');
+  s+=dimH(tb,D-tb,Z(H)-50,Z(H),`${dIn} (iç derinlik)`,fs);
+  s+=dimH(-OVF,D,Z(H)-105,Z(H),`${Dt} toplam`,fs);
+  s+=dimV(Z(F+t),Z(l1),-60,0,`${SILL}`,fs*.85);
+  s+=dimV(Z(l1),Z(l2),-60,0,`Ø${HOLE}`,fs*.85);
+  s+=dimV(Z(zUf),Z(u1),-60,0,`${SILL}`,fs*.85);
+  s+=dimV(Z(u1),Z(u2),-60,0,`Ø${HOLE}`,fs*.85);
+  s+=dimV(Z(0),Z(H),D+90,D,`${fmt(H)}`,fs);
+  s+=dimV(Z(F),Z(zSeam),D+44,D,`alt ${fmt(mL)}`,fs*.8);
+  s+=dimV(Z(zSeam),Z(H),D+44,D,`üst ${fmt(mU+t)}`,fs*.8);
+  return svg([-OVF-130,Z(H)-160,D+OVF+260,H+270],s,'Yan kesit');
 }
 
 /* ---------- eğik izometrik (kabin projeksiyonu) ---------- */
 const CX=.5*Math.cos(35*Math.PI/180), CY=.5*Math.sin(35*Math.PI/180);
 const P=(x,y,z)=>[x+y*CX,-z-y*CY];
 function boxes(g){
-  const {W,D,F,t,hc,hs,bodyH,gh,dIn,holesG,holesH}=g; const b=[];
+  const {W,D,F,t,tb,hc,dIn,zSeam,zUf,zR,H,holesL,holesU}=g; const b=[], up=200; // up: üst modül ayrılma payı
   const add=(id,x0,x1,y0,y1,z0,z1,ex,extra)=>b.push(Object.assign({id,x0,x1,y0,y1,z0,z1,ex},extra||{}));
-  [[30,70,30,70],[W-70,W-30,30,70],[30,70,D-70,D-30],[W-70,W-30,D-70,D-30]].forEach(([a,c,d,e],i)=>add('',a,c,d,e,0,F,[0,0,-200]));
-  add('B',0,W,t,D-t,F,F+t,[0,0,-140]);
-  add('C',0,t,t,D-t,F+t,F+t+hs,[-260,0,0]);
-  add('C',W-t,W,t,D-t,F+t,F+t+hs,[260,0,0]);
-  add('D',t,W-t,t,D-t,F+t+hc,F+2*t+hc,[0,0,0]);
-  add('E',(W-t)/2,(W+t)/2,t,D-t,F+t,F+t+hc,[0,0,-70]);
-  add('E',(W-t)/2,(W+t)/2,t,D-t,F+2*t+hc,F+2*t+2*hc,[0,0,110]);
-  add('F',0,W,D-t,D,F,F+bodyH-t,[0,420,0]);
-  add('G',0,W,0,t,F,F+gh,[0,-520,-60],{holes:holesG});
-  add('H',0,W,0,t,F+gh,F+bodyH-t,[0,-520,120],{holes:holesH});
-  add('A',-OVS,W+OVS,-OVF,D,F+bodyH-t,F+bodyH,[0,0,330]);
+  [[30,70,30,70],[W-70,W-30,30,70],[30,70,D-70,D-30],[W-70,W-30,D-70,D-30]].forEach(([a,c,d,e])=>add('',a,c,d,e,0,F,[0,0,-200]));
+  add('A',0,W,tb,D-tb,F,F+t,[0,0,-140]);
+  add('B',0,t,tb,D-tb,F+t,zSeam,[-260,0,0]);
+  add('B',W-t,W,tb,D-tb,F+t,zSeam,[260,0,0]);
+  add('D',(W-t)/2,(W+t)/2,tb,D-tb,F+t,F+t+hc,[0,0,-40]);
+  add('C',t,W-t,tb,D-tb,zSeam-t,zSeam,[0,0,40]);
+  add('E',0,W,D-tb,D,F,zSeam,[0,420,0]);
+  add('F',0,W,0,tb,F,zSeam,[0,-520,-60],{holes:holesL});
+  add('G',0,W,tb,D-tb,zSeam,zUf,[0,0,up+60]);
+  add('H',0,t,tb,D-tb,zUf,zR,[-260,0,up+110]);
+  add('H',W-t,W,tb,D-tb,zUf,zR,[260,0,up+110]);
+  add('I',(W-t)/2,(W+t)/2,tb,D-tb,zUf,zR,[0,0,up+110]);
+  add('K',0,W,D-tb,D,zSeam,zR,[0,420,up+110]);
+  add('L',0,W,0,tb,zSeam,zR,[0,-520,up+150],{holes:holesU});
+  add('J',-OVS,W+OVS,-OVF,D,zR,H,[0,0,up+360]);
   return b;
 }
 function order(bs){
@@ -433,7 +459,8 @@ function drawPart(p){
     }else{
       const xs=[...new Set(p.holes.map(o=>o.cx))].sort((x,y)=>x-y), ys=[...new Set(p.holes.map(o=>o.cy))].sort((x,y)=>x-y);
       s+=dimV(0,-ys[0],w+fs*1.4,w,fmt(ys[0]),fs*.75);
-      s+=dimV(-ys[1],-h,w+fs*1.4,w,fmt(h-ys[1]),fs*.75);
+      const yt=ys[ys.length-1];
+      s+=dimV(-yt,-h,w+fs*1.4,w,fmt(h-yt),fs*.75);
       s+=dimH(0,xs[0],-h-fs*1.2,-h,fmt(xs[0]),fs*.75);
       s+=dimH(xs[0],xs[1],-h-fs*1.2,-h,fmt(xs[1]-xs[0]),fs*.75);
     }
@@ -466,13 +493,13 @@ function pack(pieces,SW,SL){
       }
     }
     if(!ok) return null;
-    const score=sheets.length*1e7+sheets[sheets.length-1].len;
+    const score=sheets.length*1e7+Math.max(...sheets.map(s=>s.len)); // en dolu plakada en çok pay kalsın
     if(!best||score<best.score) best={score,sheets};
   }
   return best.sheets;
 }
-function drawSheet(sh,SW,SL,i,n){
-  const fs=SL*.03; let s=rect(0,0,SL,SW,'sheet-bg');
+function drawSheet(sh,SW,SL,i,n,label){
+  const long=SL/SW>3, fs=long?SW*.09:SL*.03; let s=rect(0,0,SL,SW,'sheet-bg');
   sh.items.forEach(({p,x,y,a,b})=>{
     // plakayı yatay çiziyoruz: boyuna → x, enine → y
     s+=rect(y,x,b,a,'piece');
@@ -482,28 +509,53 @@ function drawSheet(sh,SW,SL,i,n){
   });
   s+=dimH(0,SL,-fs*1.4,0,`${SL}`,fs);
   s+=dimV(0,SW,-fs*1.4,0,`${SW}`,fs);
-  return `<div class="board"><div class="cap"><span>PLAKA ${i+1} / ${n}</span><span>${SW} × ${SL} mm</span></div>${svg([-fs*3,-fs*3,SL+fs*4,SW+fs*4],s,'Plaka '+(i+1))}</div>`;
+  return `<div class="board"${long?' style="grid-column:1/-1"':''}><div class="cap"><span>${label} ${i+1} / ${n}</span><span>${SW} × ${SL} mm</span></div>${svg([-fs*3,-fs*3,SL+fs*4,SW+fs*4],s,label+' '+(i+1))}</div>`;
 }
 
 /* ---------- metinler ---------- */
 function render(){
-  const g=geom(), {W,D,H,t,hc,wc,dIn,parts}=g;
+  const g=geom(), {W,D,Dt,H,t,tb,hc,wc,dIn,mL,mU,parts}=g;
+  const [SW,SL]=state.sheet.split('x').map(Number), [FW,FL]=FB_SHEET, strip=SW===600;
+  const kParts=parts.filter(p=>p.m==='k'), oParts=parts.filter(p=>p.m==='o');
+  const expand=ps=>{const a=[];ps.forEach(p=>{for(let i=0;i<p.qty;i++)a.push(p)});return a};
+  const kSheets=pack(expand(kParts),SW,SL), oSheets=pack(expand(oParts),FW,FL);
+  const ids=ps=>ps.map(p=>p.id).join(', ');
+
   const warns=[];
   if(wc<HOLE+40) warns.push(`Kabin iç genişliği ${fmt(wc)} mm, Ø${HOLE} delik için dar. Genişliği artır.`);
   if(hc<SILL+HOLE+30) warns.push(`Kabin iç yüksekliği ${fmt(hc)} mm, delik sığmıyor. Yüksekliği artır.`);
   if(hc<330&&hc>=SILL+HOLE+30) warns.push(`Kabin iç yüksekliği ${fmt(hc)} mm; iri bir kedi için 350 mm üstü daha rahat.`);
   if(W+2*OVS>900) warns.push(`Çatı ile en geniş nokta ${W+2*OVS} mm; balkonun 90 cm civarıysa sığmayabilir.`);
+  if(!kSheets) warns.push(`Gövde parçalarından biri ${SW/10} cm genişliğindeki plakaya sığmıyor. Toplam derinlik en fazla ${SW} mm olabilir.`);
+  else if(strip&&kSheets.length>2) warns.push(`Bu ölçülerle gövde için ${kSheets.length} şerit gerekiyor, alınan 2 şerit yetmiyor. Yüksekliği ya da genişliği biraz azalt.`);
   $('warn').hidden=!warns.length; $('warn').innerHTML=warns.join('<br>');
 
-  const area=parts.reduce((a,p)=>a+p.w*p.h*p.qty,0)/1e6;
-  const dens=state.mat==='ply'?550:680, kg=area*t/1000*dens;
+  const areaOf=ps=>ps.reduce((a,p)=>a+p.w*p.h*p.qty,0)/1e6;
+  const area=areaOf(parts), kArea=areaOf(kParts), oArea=areaOf(oParts);
+  const dens=state.mat==='ply'?550:680, kgOf=ps=>ps.reduce((a,p)=>a+p.w*p.h*p.qty*p.th,0)/1e9*dens;
+  const kgL=kgOf(parts.filter(p=>p.mod==='alt')), kgU=kgOf(parts.filter(p=>p.mod==='üst'));
+  const m2=n=>n.toFixed(2).replace('.',',');
   $('specs').innerHTML=`
-    <div><dt>Dış ölçü</dt><dd class="num">${W/10} × ${D/10} × ${H/10} <small>cm</small></dd></div>
+    <div><dt>Dış ölçü</dt><dd class="num">${W/10} × ${fmt(Dt/10)} × ${fmt(H/10)} <small>cm</small></dd></div>
     <div><dt>Çatı dahil en geniş</dt><dd class="num">${(W+2*OVS)/10} <small>cm</small></dd></div>
+    <div><dt>Alt modül</dt><dd class="num">${fmt(mL/10)} <small>cm yükseklik, ~${Math.round(kgL)} kg</small></dd></div>
+    <div><dt>Üst modül, çatı dahil</dt><dd class="num">${fmt((mU+t)/10)} <small>cm yükseklik, ~${Math.round(kgU)} kg</small></dd></div>
     <div><dt>Kabin içi (4 adet)</dt><dd class="num">${fmt(wc/10)} × ${fmt(hc/10)} <small>cm, derinlik ${fmt(dIn/10)}</small></dd></div>
     <div><dt>Giriş deliği</dt><dd class="num">Ø${HOLE/10} <small>cm, tabandan ${SILL/10} cm yukarıda</small></dd></div>
-    <div><dt>Parça / alan</dt><dd class="num">${parts.reduce((a,p)=>a+p.qty,0)} <small>parça, ${area.toFixed(2).replace('.',',')} m²</small></dd></div>
-    <div><dt>Tahmini ağırlık</dt><dd class="num">~${Math.round(kg)} <small>kg</small></dd></div>`;
+    <div><dt>Parça / alan</dt><dd class="num">${parts.reduce((a,p)=>a+p.qty,0)} <small>parça, ${m2(area)} m²</small></dd></div>
+    <div><dt>Ayaklar</dt><dd class="num">${FEET/10} <small>cm, alt modülün altında</small></dd></div>`;
+
+  const kUsed=kSheets?kSheets.length:'?';
+  $('stock').innerHTML=strip?`<h3>Alınan plakalar: 2 adet ${t} mm, 60 × 244 cm</h3>
+    <p>Ev, üst üste oturan iki ayrı kutudan oluşuyor. Her modülün kendi tabanı, yanları, bölmesi, arkası ve önü var; ayrı taşınır, ayrı temizlenir. Malzeme şöyle dağıldı:</p>
+    <ul class="list">
+      <li><b>${t} mm gövde parçaları (${ids(kParts)})</b> alınan şeritlerden çıkıyor: ${kUsed} şerit, ${m2(kArea)} m².</li>
+      <li><b>${tb} mm parçalar (${ids(oParts)})</b>: ön ve arka paneller ile üst modülün tabanı. Ek olarak ${tb} mm su geçirmez plywood gerekiyor (${m2(oArea)} m², kesimciden 122 × 244 cm'lik plakadan). Bunlar yük taşımaz, ince olmaları yeterli.</li>
+      <li>İki şerit toplam ${m2(2*.6*2.44)} m². Bütün paneller ${t} mm olsaydı yaklaşık 4,5 m² gerekirdi, ayrıca 80 cm genişliğindeki ön, arka ve taban panelleri 60 cm'lik şeride hem boyca hem ence sığmazdı.</li>
+      <li>Toplam yükseklik ${fmt(H/10)} cm, derinlik ${fmt(Dt/10)} cm (çatı dahil). Varsayılan 89,9 cm yükseklik, ikinci şeritteki altı parça 244 cm'ye sığsın diye seçildi.</li>
+    </ul>
+    <p>Şeritlerin gerçek genişliğini metreyle ölç. 600 mm'den azsa, örneğin 595 mm ise, "Toplam derinlik" kutusuna o değeri yaz.</p>`
+    :`<h3>Malzeme dağılımı</h3><p>Gövde (${ids(kParts)}) ${t} mm, ön/arka paneller ve üst taban (${ids(oParts)}) ${tb} mm.</p>`;
 
   drawIso(g);
   $('dFront').innerHTML=drawFront(g);
@@ -511,28 +563,38 @@ function render(){
   $('dSide').innerHTML=drawSide(g);
 
   const L=p=>Math.max(p.w,p.h), S=p=>Math.min(p.w,p.h);
-  $('cutBody').innerHTML=parts.map(p=>`<tr><td><span class="code">${p.id}</span></td><td>${p.name}</td><td class="num">${p.qty}</td><td class="num">${fmt(L(p))}</td><td class="num">${fmt(S(p))}</td><td>${p.note||''}</td></tr>`).join('');
+  const kName=state.mat==='ply'?`${t} mm su geçirmez (WBP) plywood`:`${t} mm suntalam, görünen kenarlar PVC bantlı`;
+  const oName=state.mat==='ply'?`${tb} mm su geçirmez (WBP) plywood`:`${tb} mm suntalam / MDF, görünen kenarlar bantlı`;
+  const kSrc=strip?`alınan 60 × 244 cm şeritlerden`:`${SW/10} × ${SL/10} cm plakadan`;
+  const row=p=>`<tr><td><span class="code">${p.id}</span></td><td>${p.name}</td><td class="num">${p.qty}</td><td class="num">${fmt(L(p))}</td><td class="num">${fmt(S(p))}</td><td>${p.note||''}</td></tr>`;
+  const head=txt=>`<tr><th colspan="6" style="background:var(--sheet);color:var(--ink);font:600 14px var(--f-display);letter-spacing:0;text-transform:none">${txt}</th></tr>`;
+  $('cutBody').innerHTML=head(`${kName}, ${kSrc}`)+kParts.map(row).join('')+head(`${oName}, ek plaka`)+oParts.map(row).join('');
   $('totQty').textContent=parts.reduce((a,p)=>a+p.qty,0);
-  $('totArea').textContent=`${area.toFixed(2).replace('.',',')} m² net malzeme`;
-  const matName=state.mat==='ply'?`${t} mm su geçirmez (WBP) plywood`:`${t} mm suntalam, görünen tüm kenarlar PVC bantlı`;
-  $('shopText').textContent=`KEDİ EVİ KESİM LİSTESİ\nMalzeme: ${matName}\nÖlçüler mm, uzunluk × genişlik\n\n`+
-    parts.map(p=>`${p.id}  ${p.name.padEnd(15)} ${String(p.qty).padStart(2)} adet  ${fmt(L(p))} × ${fmt(S(p))}`).join('\n')+
-    `\n\nDelikler (kesimci yapabiliyorsa):\nG ve H: 2'şer adet Ø${HOLE} delik. Merkezler: kenarlardan ${g.hx} mm; G'de alttan ${fmt(g.holesG[0].cy)} mm, H'de alttan ${g.holesH[0].cy} mm.\nF: 8 adet Ø25 havalandırma deliği (isteğe bağlı).`;
+  $('totArea').textContent=`${m2(kArea)} m² (${t} mm) + ${m2(oArea)} m² (${tb} mm)`;
+  const line=p=>`${p.id}  ${p.name.padEnd(15)} ${String(p.qty).padStart(2)} adet  ${fmt(L(p))} × ${fmt(S(p))}`;
+  $('shopText').textContent=`KEDİ EVİ KESİM LİSTESİ (2 modül)\nÖlçüler mm, uzunluk × genişlik\nA–F alt modül, G–L üst modül\n\n`+
+    `1) ${kName.toUpperCase()}, ${kSrc}\n`+kParts.map(line).join('\n')+
+    `\n\n2) ${oName.toUpperCase()}, ek plaka\n`+oParts.map(line).join('\n')+
+    `\n\nDelikler (kesimci yapabiliyorsa):\nF ve L: 2'şer adet Ø${HOLE} delik. Merkezler sol ve sağ kenardan ${g.hx} mm; F'de alttan ${fmt(g.holesL[0].cy)} mm, L'de alttan ${fmt(g.holesU[0].cy)} mm.\nE ve K: 4'er adet Ø25 havalandırma deliği (isteğe bağlı).`+
+    (strip?`\n\nNot: Çatı (J) şerit genişliğinin tamamını kullanır, boyuna kesim gerekmez.`:'');
 
-  $('parts').innerHTML=parts.map(p=>`<div class="part"><div class="part-h"><span class="code">${p.id}</span><h3>${p.name}</h3><span class="q">${p.qty} adet</span></div>
-    ${drawPart(p)}<div class="note">${p.view} bakış · ${p.note||''}</div></div>`).join('');
+  $('parts').innerHTML=parts.map(p=>`<div class="part"><div class="part-h"><span class="code">${p.id}</span><h3>${p.name}</h3><span class="q">${p.qty} adet · ${p.th} mm</span></div>
+    ${drawPart(p)}<div class="note">${p.mod} modül · ${p.view} bakış · ${p.note||''}</div></div>`).join('');
 
-  const [SW,SL]=state.sheet.split('x').map(Number);
-  const pcs=[]; parts.forEach(p=>{for(let i=0;i<p.qty;i++)pcs.push(p)});
-  const sheets=pack(pcs,SW,SL);
-  if(!sheets){$('sheets').innerHTML='<div class="warn">Bazı parçalar bu plakaya sığmıyor, daha büyük plaka seç.</div>';$('sheetTitle').textContent='Plaka yerleşimi';}
-  else{$('sheetTitle').textContent=`${sheets.length} plaka yetiyor`;$('sheets').innerHTML=sheets.map((sh,i)=>drawSheet(sh,SW,SL,i,sheets.length)).join('');}
+  let sh='';
+  if(!kSheets) sh+='<div class="warn">Gövde parçalarından biri bu plakaya sığmıyor.</div>';
+  else sh+=kSheets.map((s,i)=>drawSheet(s,SW,SL,i,kSheets.length,strip?`GÖVDE ŞERİDİ (${t} mm)`:`GÖVDE PLAKASI (${t} mm)`)).join('');
+  if(oSheets) sh+=oSheets.map((s,i)=>drawSheet(s,FW,FL,i,oSheets.length,`EK PLAKA (${tb} mm)`)).join('');
+  $('sheets').innerHTML=sh;
+  $('sheetTitle').textContent=kSheets?`Gövde ${kSheets.length} ${strip?'şerit':'plaka'}, ${tb} mm parçalar 1 ek plaka`:'Plaka yerleşimi';
 
-  const screw=t<=16?'4×40':t<=18?'4×50':'5×60';
-  const nSheet=sheets?sheets.length:'?';
+  const screw=t<=16?'4×40':t<=18?'4×50':'5×60', screwB=tb<=9?'3,5×30':tb<=12?'3,5×35':screw;
   $('buyList').innerHTML=[
-    `${nSheet} plaka ${matName} (${SW/10}×${SL/10} cm) veya kesimciden yukarıdaki liste`,
-    `100 adet ${screw} mm paslanmaz ya da galvaniz ahşap vidası (dış mekan için paslanmayan)`,
+    strip?`Alınan 2 adet ${t} mm, 60 × 244 cm plaka (${ids(kParts)})`:`${kUsed} plaka ${kName} (gövde)`,
+    `1 plaka ${oName} (122 × 244 cm) veya kesimcinin artık parçalarından ${ids(oParts)}`,
+    `50 adet ${screw} mm paslanmaz ya da galvaniz vida (gövde birleşimleri)`,
+    `80 adet ${screwB} mm paslanmaz vida (ön, arka paneller ve üst taban)`,
+    `4 adet paslanmaz düz bağlantı laması, 60–80 mm, + 16 adet 3,5×16 vida (iki modülü bağlamak için)`,
     `D3 sınıfı suya dayanıklı ahşap tutkalı, 250 g`,
     `4 adet ${FEET} mm plastik veya kauçuk mobilya ayağı + vidaları`,
     `0,75 L dış mekan verniği (yat verniği) veya su bazlı dış cephe ahşap boyası`,
@@ -540,16 +602,16 @@ function render(){
   ].map(x=>`<li>${x}</li>`).join('');
 
   $('steps').innerHTML=[
-    `<b>Delikleri aç ve zımparala.</b> Kesimci delmediyse G ve H'ye delik merkezlerini işaretle, pergelle Ø${HOLE} daire çiz, bir köşeye matkapla delik açıp dekupajla kes. Bütün kenarları ve delik içlerini 120 sonra 180 zımparayla yuvarla.`,
-    `<b>Ayakları tabana tak.</b> B'nin alt yüzüne, köşelerden 30–40 mm içeride 4 ayağı vidala.`,
-    `<b>Yan panelleri tabana bağla.</b> İki C'yi B'nin üstüne, dış kenarlar hizalı oturt. Tutkal sür, alttan B'nin içinden her yan panele 4 vida at.`,
-    `<b>Ara rafı yerleştir.</b> Alt orta bölmeyi (E) B'nin ortasına dik koy, takoz gibi kullan: D'yi iki yanın arasına, E'nin üstüne oturt. Böylece raf tam ${fmt(hc)} mm yükseklikte durur. Yanlardan rafa 4'er vida at.`,
-    `<b>Alt orta bölmeyi sabitle.</b> E'yi B'nin altından 3, D'nin üstünden 3 vidayla bağla. Ortada olduğunu iki yandan ${fmt(wc)} mm ölçerek kontrol et.`,
-    `<b>Üst orta bölmeyi koy.</b> İkinci E'yi D'nin üstüne, alttaki E'nin tam hizasına koy. Alt kabinin içinden, D'nin altından yukarı 3 vida at.`,
-    `<b>Arka paneli vidala ve gönyeyi kontrol et.</b> Kutunun köşegenlerini ölç, iki köşegen eşit olunca F'yi arkadan yanlara, tabana, rafa ve bölmelere vidala (her 15 cm'de bir). Arka panel kutuyu kare tutar.`,
-    `<b>Çatıyı tak.</b> A'yı üste koy: yanlardan ${OVS}, önden ${OVF} mm taşsın, arkası F ile aynı hizada olsun. Üstten yanlara, arkaya ve üst bölmeye vidala.`,
-    `<b>Vernikle.</b> Gövdeyi içli dışlı, G ve H'yi ayrı olarak 2–3 kat vernikle. Katlar arasında 180 zımparayla hafifçe geç. En az bir hafta havalandır.`,
-    `<b>Ön panelleri tak.</b> Önce G'yi (taban ve rafın ön kenarını örter), sonra H'yi vidala. G'de 8, H'de 6 vida yeterli; temizlikte bunları söküp paneli çıkarırsın.`,
+    `<b>Delikleri aç ve zımparala.</b> Kesimci delmediyse F ve L'ye delik merkezlerini işaretle, pergelle Ø${HOLE} daire çiz, bir köşeye matkapla delik açıp dekupajla kes. Bütün kenarları ve delik içlerini 120 sonra 180 zımparayla yuvarla.`,
+    `<b>Alt modül: ayaklar ve yanlar.</b> A'nın alt yüzüne, köşelerden 30–40 mm içeride 4 ayağı vidala. İki B'yi A'nın üstüne, dış kenarlar hizalı oturt. Tutkal sür, alttan A'nın içinden her yan panele 4 vida at.`,
+    `<b>Alt modül: bölme ve tavan.</b> D'yi A'nın ortasına dik koy, C'yi iki yanın arasına D'nin üstüne oturt; D takoz görevi görür, C tam ${fmt(hc)} mm yükseklikte durur. Yanlardan C'ye 4'er vida at. D'yi alttan A'dan, üstten C'den 3'er vidayla bağla, iki yandan ${fmt(wc)} mm ölçerek ortada olduğunu kontrol et.`,
+    `<b>Alt modül: arka panel.</b> Köşegenleri ölç, eşit olunca E'yi arkadan A, B, C ve D'ye ${screwB} vidayla her 10–12 cm'de bir vidala. Alt modül bitti.`,
+    `<b>Üst modül: taban ve yanlar.</b> G'yi düz zemine koy, iki H'yi üstüne dış kenarlar hizalı oturt. G'nin altından her yan panele 4 vida (${screwB}) at.`,
+    `<b>Üst modül: bölme ve çatı.</b> I'yı G'nin ortasına dik koy, alttan G'den 3 vidayla bağla. J'yi üste koy: yanlardan ${OVS}, önden ${OVF} mm taşsın, arkası yan panellerin arka kenarıyla aynı hizada olsun. Üstten H ve I'ya ${screw} vidayla vidala.`,
+    `<b>Üst modül: arka panel.</b> Köşegenleri kontrol edip K'yi arkadan G, H ve I'ya vidala. Üst modül bitti.`,
+    `<b>Vernikle.</b> İki modülü içli dışlı, F ve L'yi ayrı olarak 2–3 kat vernikle. Katlar arasında 180 zımparayla hafifçe geç. En az bir hafta havalandır.`,
+    `<b>Ön panelleri tak.</b> F'yi alt modüle (8 vida), L'yi üst modüle (6 vida) tak. Temizlikte bu vidaları söküp paneli çıkarırsın.`,
+    `<b>Modülleri birleştir.</b> Alt modülü yerine koy, üst modülü üstüne oturt; ön, arka ve yan kenarlar hizalı olsun. Arka yüze 2, iki yana birer düz lama vidala; her lamanın yarısı alt, yarısı üst modülde kalsın. Ayırmak için yalnız lama vidalarını sök.`,
     `<b>Kabinleri hazırla.</b> Tabanlara XPS köpük, üstüne minder koy. Evi rüzgâr almayan duvar dibine, girişler rüzgârın tersine bakacak şekilde yerleştir.`,
   ].map(x=>`<li><div>${x}</div></li>`).join('');
 }
@@ -558,12 +620,12 @@ function render(){
 const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
 function readInputs(){
   const n=(id,a,b,d)=>{const v=parseFloat($(id).value);return isFinite(v)?clamp(v,a,b):d};
-  state.W=n('inW',600,900,800); state.D=n('inD',400,700,600); state.H=n('inH',750,1100,900);
-  state.t=+$('inT').value; state.mat=$('inM').value; state.sheet=$('inS').value;
+  state.W=n('inW',600,900,800); state.D=n('inD',400,700,600); state.H=n('inH',750,1100,899);
+  state.t=+$('inT').value; state.tb=+$('inTB').value; state.mat=$('inM').value; state.sheet=$('inS').value;
   render();
 }
 ['inW','inD','inH'].forEach(id=>$(id).addEventListener('change',readInputs));
-['inT','inM','inS'].forEach(id=>$(id).addEventListener('change',readInputs));
+['inT','inTB','inM','inS'].forEach(id=>$(id).addEventListener('change',readInputs));
 $('exp').addEventListener('input',e=>{state.e=e.target.value/100;drawIso(geom());});
 $('copyBtn').addEventListener('click',()=>{
   const txt=$('shopText').textContent, done=()=>{$('copied').hidden=false;setTimeout(()=>$('copied').hidden=true,1800)};

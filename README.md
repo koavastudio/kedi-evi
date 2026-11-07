@@ -5,18 +5,24 @@
 
 Teknik dosya (PDF, 5 pafta): **[Kedi-Evi-Teknik-Dosya.pdf](Kedi-Evi-Teknik-Dosya.pdf)**
 
-- Dış ölçü: 80 × 60 × 90 cm (ayaklar dahil), çatı dahil en geniş nokta 84 cm
-- 4 kabin, her biri içten 37,3 × 40,3 cm, derinlik 56,4 cm
-- Malzeme: 18 mm su geçirmez (WBP) plywood, 2 plaka 1220 × 2440 mm
+- Üst üste oturan **iki ayrı modül**, her birinde 2 kabin (A–F alt, G–L üst)
+- Dış ölçü: 80 × 60 × 89,9 cm (ayaklar ve çatı dahil), en geniş nokta 84 cm
+- Alt modül 42,9 cm, üst modül çatı dahil 42 cm yükseklik
+- Kabin içi 37,3 × 39,3 cm, derinlik 55,2 cm
+- 18 mm parçalar: 2 adet 600 × 2440 mm plakadan; 9 mm parçalar: ek plakadan
 - Tüm ölçüler mm ve net parça ölçüsüdür
 
-| Kod | Parça | Adet | Ölçü (mm) |
-|---|---|---|---|
-| A | Çatı | 1 | 840 × 640 |
-| B | Taban | 1 | 800 × 564 |
-| C | Yan panel | 2 | 824 × 564 |
-| D | Ara raf | 1 | 764 × 564 |
-| E | Orta bölme | 2 | 564 × 403 |
-| F | Arka panel | 1 | 842 × 800 (8 × Ø25 delik, isteğe bağlı) |
-| G | Ön panel, alt | 1 | 800 × 439 (2 × Ø180 delik) |
-| H | Ön panel, üst | 1 | 800 × 403 (2 × Ø180 delik) |
+| Kod | Parça | Adet | Kalınlık | Ölçü (mm) |
+|---|---|---|---|---|
+| A | Alt taban | 1 | 18 | 800 × 552 |
+| B | Alt yan panel | 2 | 18 | 552 × 411 |
+| C | Alt tavan | 1 | 18 | 764 × 552 |
+| D | Alt bölme | 1 | 18 | 552 × 393 |
+| E | Alt arka panel | 1 | 9 | 800 × 429 |
+| F | Alt ön panel | 1 | 9 | 800 × 429 (2 × Ø180 delik) |
+| G | Üst taban | 1 | 9 | 800 × 552 |
+| H | Üst yan panel | 2 | 18 | 552 × 393 |
+| I | Üst bölme | 1 | 18 | 552 × 393 |
+| J | Çatı | 1 | 18 | 840 × 600 |
+| K | Üst arka panel | 1 | 9 | 800 × 402 |
+| L | Üst ön panel | 1 | 9 | 800 × 402 (2 × Ø180 delik) |
